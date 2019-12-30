@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{E4A7CFFC-B588-4A30-953C-D7C808365127}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Solvers\AoC2019_Solvers.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Test\AoC2019Tests.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="AoC2019_Solvers">
+        <MSBuild Projects="Solvers\AoC2019_Solvers.dproj"/>
+    </Target>
+    <Target Name="AoC2019_Solvers:Clean">
+        <MSBuild Projects="Solvers\AoC2019_Solvers.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="AoC2019_Solvers:Make">
+        <MSBuild Projects="Solvers\AoC2019_Solvers.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="AoC2019Tests">
+        <MSBuild Projects="Test\AoC2019Tests.dproj"/>
+    </Target>
+    <Target Name="AoC2019Tests:Clean">
+        <MSBuild Projects="Test\AoC2019Tests.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="AoC2019Tests:Make">
+        <MSBuild Projects="Test\AoC2019Tests.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="AoC2019_Solvers;AoC2019Tests"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="AoC2019_Solvers:Clean;AoC2019Tests:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="AoC2019_Solvers:Make;AoC2019Tests:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
