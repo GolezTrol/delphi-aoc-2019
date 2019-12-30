@@ -4,7 +4,13 @@ uses
   AoC.Mainform in 'AoC.Mainform.pas' {FrmAoC},
   Spring,
   Spring.Container,
-  Bootstrapper in 'Bootstrapper.pas';
+  Bootstrapper in 'Bootstrapper.pas',
+  Solver.PathSolver in 'Solver.PathSolver.pas',
+  Solver.Resolver in 'Solver.Resolver.pas',
+  Solver.Registration in 'Solver.Registration.pas',
+  Solver.Y2019 in 'Solver.Y2019.pas',
+  Module.Fuel in 'Module.Fuel.pas',
+  InputUtils in 'InputUtils.pas';
 
 {$R *.res}
 

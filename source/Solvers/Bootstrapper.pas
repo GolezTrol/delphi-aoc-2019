@@ -10,24 +10,36 @@ uses
 type
   TBootstrapper = class
   private
-    FContainerIntf: IContainer;
     FContainer: TContainer;
+  private
+    procedure RegisterSolvers;
   public
     constructor Create;
+    destructor Destroy; override;
     procedure Initialize;
     procedure Run;
+    property Container: TContainer read FContainer;
   end;
 
 implementation
 
 uses
   Forms,
-  AoC.Mainform;
+  AoC.Mainform,
+  Solver.Intf,
+  Solver.PathSolver,
+  Solver.Resolver,
+  Solver.Registration;
 
 constructor TBootstrapper.Create;
 begin
   FContainer := TContainer.Create;
-  FContainerIntf := FContainer;
+end;
+
+destructor TBootstrapper.Destroy;
+begin
+  FContainer.Free;
+  inherited;
 end;
 
 procedure TBootstrapper.Initialize;
@@ -38,7 +50,23 @@ begin
       Application.CreateForm(TFrmAoC, Result);
     end);
 
+  FContainer.RegisterType<IPathSolver, TPathSolver>;
+
+  RegisterSolvers;
+
   FContainer.Build;
+end;
+
+
+procedure TBootstrapper.RegisterSolvers;
+begin
+  FContainer.RegisterType<ISolverResolver>.DelegateTo(
+    function: ISolverResolver
+    begin
+      Result := TSolverResolver.Create(FContainer);
+    end);
+
+  Solver.Registration.Register(FContainer);
 end;
 
 procedure TBootstrapper.Run;
