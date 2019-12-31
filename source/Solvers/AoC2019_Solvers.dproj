@@ -93,6 +93,8 @@
         <DCCReference Include="Solver.Y2019.pas"/>
         <DCCReference Include="Module.Fuel.pas"/>
         <DCCReference Include="InputUtils.pas"/>
+        <DCCReference Include="IntCode.Processor.pas"/>
+        <DCCReference Include="AoC.Types.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -20,7 +20,8 @@ uses
   Sample.Tests in 'Sample.Tests.pas',
   Module.Fuel.Tests in 'Module.Fuel.Tests.pas',
   Puzzle.Y2019.Tests in 'Puzzle.Y2019.Tests.pas',
-  Aoc.TestCase.Attribute in 'Aoc.TestCase.Attribute.pas';
+  Aoc.TestCase.Attribute in 'Aoc.TestCase.Attribute.pas',
+  IntCode.Processor.Tests in 'IntCode.Processor.Tests.pas';
 
 {$R *.RES}
 

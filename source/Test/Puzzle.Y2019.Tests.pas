@@ -39,6 +39,16 @@ type
     [AoCTestCase('2019.1.2', '1969', '966')]
     [AoCTestCase('2019.1.2', '100756', '50346')]
 
+    // Day 2: 1202 Program Alarm
+    // Day 2, 1: Restore gravity assist
+    // The solver should replace input values with [1]12,[2]2
+    // The first test case is a program as it should be executed.
+    // It adds up the values at positions 12 (5) and 2 (2), leading to a result of 7.
+    // The second test case, is a program with other (invalid) ovalues in that spot, to prove
+    // that the solver replaces the values correctly.
+    [AoCTestCase('2019.2.1', '1,12,2,0,99,0,0,0,0,0,0,0,5', '7' {2 + 5})]
+    [AoCTestCase('2019.2.1', '1,77,88,0,99,0,0,0,0,0,0,0,5', '7' {2 + 5})]
+
     procedure Tests(const Puzzle, Input, ExpectedResult: String);
   end;
 

@@ -17,6 +17,8 @@ procedure Register(Container: TContainer);
 begin
   Container.RegisterType<ISolver, TSolver2019_1_1>('2019.1.1');
   Container.RegisterType<ISolver, TSolver2019_1_2>('2019.1.2');
+  Container.RegisterType<ISolver, TSolver2019_2_1>('2019.2.1');
+  Container.RegisterType<ISolver, TSolver2019_2_2>('2019.2.2');
 end;
 
 end.

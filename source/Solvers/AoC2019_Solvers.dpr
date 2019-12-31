@@ -10,7 +10,9 @@ uses
   Solver.Registration in 'Solver.Registration.pas',
   Solver.Y2019 in 'Solver.Y2019.pas',
   Module.Fuel in 'Module.Fuel.pas',
-  InputUtils in 'InputUtils.pas';
+  InputUtils in 'InputUtils.pas',
+  IntCode.Processor in 'IntCode.Processor.pas',
+  AoC.Types in 'AoC.Types.pas';
 
 {$R *.res}
 
