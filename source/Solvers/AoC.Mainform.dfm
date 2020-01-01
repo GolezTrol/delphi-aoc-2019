@@ -1,6 +1,7 @@
 object FrmAoC: TFrmAoC
   Left = 0
   Top = 0
+  ActiveControl = btnGoGoGo
   Caption = 'Advent Of Code 2019'
   ClientHeight = 417
   ClientWidth = 657

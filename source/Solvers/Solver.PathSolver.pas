@@ -54,6 +54,10 @@ begin
         Solver := FSolverResolver.GetSolver(Puzzle);
 
         Input := TFile.ReadAllText(FileName);
+        // A string result is compiled as a var parameter. To prevent stubs from
+        // implicitly returning the previous result, initialize the variable before
+        // each call.
+        Solution := 'No result';
         Solution := Solver.Solve(Input);
         CallBack(Puzzle, Solution)
       except
