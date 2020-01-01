@@ -65,6 +65,11 @@ type
     [AoCTestCase('2019.4.1', '111111-111111', '1' )]
     [AoCTestCase('2019.4.1', '111110-111112', '2' )]
     [AoCTestCase('2019.4.1', '555550-555552', '0' )]
+
+    // Day 4, 2: Additional criteria
+    [AoCTestCase('2019.4.2', '112233-112233', '1' )]
+    [AoCTestCase('2019.4.2', '123444-123444', '0' )]
+    [AoCTestCase('2019.4.2', '111120-111123', '1' )] // Finds only 111122
     procedure Tests(const Puzzle, Input, ExpectedResult: String);
   end;
 

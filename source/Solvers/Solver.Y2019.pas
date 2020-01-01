@@ -196,7 +196,7 @@ begin
   TInput.Range(Input, A, B);
   Count := 0;
   for i := A to B do
-    if TPassword.Validate(i.ToString) then
+    if TPassword.Validate1(i.ToString) then
       Inc(Count);
   Result := Count.ToString;
 end;
@@ -204,8 +204,17 @@ end;
 { TSolver2019_4_2 }
 
 function TSolver2019_4_2.Solve(Input: String): String;
+var
+  A, B: Integer;
+  i: Integer;
+  Count: Integer;
 begin
-
+  TInput.Range(Input, A, B);
+  Count := 0;
+  for i := A to B do
+    if TPassword.Validate2(i.ToString) then
+      Inc(Count);
+  Result := Count.ToString;
 end;
 
 end.
