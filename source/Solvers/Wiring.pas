@@ -11,6 +11,7 @@ type
     class function WireToSegments(const Wire: TWire): TSegments;
     class function FindIntersection(const Segment1, Segment2: TSegment; out Intersection: TGridLocation): Boolean;
     class function FindIntersections(const Wire1, Wire2: TWire): TIntersections;
+    class function ManhattanDistance(const A, B: TGridLocation): Integer;
   end;
 
 implementation
@@ -69,6 +70,11 @@ begin
       end;
 
   SetLength(Result, Index);
+end;
+
+class function TWiring.ManhattanDistance(const A, B: TGridLocation): Integer;
+begin
+  Result := Abs(A.X-B.X) + Abs(A.Y-B.Y);
 end;
 
 class function TWiring.WireToSegments(const Wire: TWire): TSegments;

@@ -20,6 +20,10 @@ type
   TSolver2019_2_2 = class(TInterfacedObject, ISolver)
     function Solve(Input: String): String;
   end;
+  // Day 3: Crossed wires
+  TSolver2019_3_1 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
 
 implementation
 
@@ -28,7 +32,8 @@ uses
   AoC.Types,
   InputUtils,
   Module.Fuel,
-  IntCode.Processor;
+  IntCode.Processor,
+  Wiring;
 
 { TSolver2019_1_1 }
 
@@ -109,6 +114,33 @@ begin
   end;
 
   Result := '';
+end;
+
+{ TSolver2019_3_1 }
+
+function TSolver2019_3_1.Solve(Input: String): String;
+var
+  Wires: TStringArray;
+  Wire1, Wire2: TWire;
+  Intersections: TIntersections;
+  MinDistance: Integer;
+  Distance: Integer;
+  Intersection: TGridLocation;
+  Origin: TGridLocation;
+begin
+  MinDistance := MaxInt;
+  Origin := TGridLocation.Create(0, 0);
+  Wires := TInput.StringPerLine(Input);
+  Wire1 := TInput.Wire(Wires[0]);
+  Wire2 := TInput.Wire(Wires[1]);
+  Intersections := TWiring.FindIntersections(Wire1, Wire2);
+  for Intersection in Intersections do
+  begin
+    Distance := TWiring.ManhattanDistance(Origin, Intersection);
+    if (Distance > 0) and (Distance < MinDistance) then
+      MinDistance := Distance;
+  end;
+  Result := MinDistance.ToString();
 end;
 
 end.

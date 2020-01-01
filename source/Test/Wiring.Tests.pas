@@ -17,6 +17,8 @@ type
     procedure Wires_WhenNotIntersecting_ReturnsEmptyArray;
     [Test]
     procedure Wires_WhenIntersecting_ReturnsAllLocations;
+    [Test]
+    procedure Manhattan_Distance;
   end;
 
 implementation
@@ -24,6 +26,24 @@ implementation
 uses
   AoC.Types,
   Wiring;
+
+procedure TWiringTests.Manhattan_Distance;
+  procedure Check(Expected, X1, Y1, X2, Y2: Integer);
+  begin
+    Assert.AreEqual(
+      Expected,
+      TWiring.ManhattanDistance(
+        TGridLocation.Create(X1, Y1),
+        TGridLocation.Create(X2, Y2)));
+  end;
+begin
+  Check(0, 3,3, 3,3);
+  Check(5, 0,0, 2,3);
+  Check(6, 0,0, -2,4);
+  Check(7, 0,0, -2,-5);
+  Check(13, 9,9, 2,3);
+  Check(17, 9,9, -2,3);
+end;
 
 procedure TWiringTests.Segments_WhenIntersecting_ReturnsTheLocation;
   procedure Check(Expected: TGridLocation; Segment1, Segment2: TSegment);

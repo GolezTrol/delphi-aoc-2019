@@ -95,7 +95,6 @@
         <DCCReference Include="InputUtils.pas"/>
         <DCCReference Include="IntCode.Processor.pas"/>
         <DCCReference Include="AoC.Types.pas"/>
-        <DCCReference Include="Wiring.Types.pas"/>
         <DCCReference Include="Wiring.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
