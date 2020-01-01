@@ -86,6 +86,7 @@
         <DCCReference Include="Puzzle.Y2019.Tests.pas"/>
         <DCCReference Include="Aoc.TestCase.Attribute.pas"/>
         <DCCReference Include="IntCode.Processor.Tests.pas"/>
+        <DCCReference Include="Wiring.Tests.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

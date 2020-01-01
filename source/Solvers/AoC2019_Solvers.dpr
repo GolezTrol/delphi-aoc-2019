@@ -12,7 +12,9 @@ uses
   Module.Fuel in 'Module.Fuel.pas',
   InputUtils in 'InputUtils.pas',
   IntCode.Processor in 'IntCode.Processor.pas',
-  AoC.Types in 'AoC.Types.pas';
+  AoC.Types in 'AoC.Types.pas',
+  Wiring.Types in 'Wiring.Types.pas',
+  Wiring in 'Wiring.pas';
 
 {$R *.res}
 
