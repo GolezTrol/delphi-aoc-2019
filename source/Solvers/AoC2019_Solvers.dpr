@@ -13,7 +13,8 @@ uses
   InputUtils in 'InputUtils.pas',
   IntCode.Processor in 'IntCode.Processor.pas',
   AoC.Types in 'AoC.Types.pas',
-  Wiring in 'Wiring.pas';
+  Wiring in 'Wiring.pas',
+  Password in 'Password.pas';
 
 {$R *.res}
 

@@ -12,6 +12,7 @@ type
     class function StringPerLine(Input: String): TStringArray;
     class function StringCommaSeparated(Input: String): TStringArray;
     class function Wire(Input: String): TWire;
+    class procedure Range(Input: String; out A, B: Integer);
   end;
 
 implementation
@@ -51,6 +52,15 @@ begin
   finally
     sl.Free;
   end;
+end;
+
+class procedure TInput.Range(Input: String; out A, B: Integer);
+var
+  p: Integer;
+begin
+  p := Pos('-', Input);
+  A := Copy(Input, 1, p-1).ToInteger;
+  B := Copy(Input, p+1, Length(Input)).ToInteger;
 end;
 
 class function TInput.StringCommaSeparated(Input: String): TStringArray;

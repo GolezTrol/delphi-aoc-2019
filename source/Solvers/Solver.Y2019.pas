@@ -27,6 +27,13 @@ type
   TSolver2019_3_2 = class(TInterfacedObject, ISolver)
     function Solve(Input: String): String;
   end;
+  // Day 4: Secure Container
+  TSolver2019_4_1 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
+  TSolver2019_4_2 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
 
 implementation
 
@@ -36,7 +43,8 @@ uses
   InputUtils,
   Module.Fuel,
   IntCode.Processor,
-  Wiring;
+  Wiring,
+  Password;
 
 { TSolver2019_1_1 }
 
@@ -175,6 +183,29 @@ begin
     end;
   end;
   Result := MinSteps.ToString();
+end;
+
+{ TSolver2019_4_1 }
+
+function TSolver2019_4_1.Solve(Input: String): String;
+var
+  A, B: Integer;
+  i: Integer;
+  Count: Integer;
+begin
+  TInput.Range(Input, A, B);
+  Count := 0;
+  for i := A to B do
+    if TPassword.Validate(i.ToString) then
+      Inc(Count);
+  Result := Count.ToString;
+end;
+
+{ TSolver2019_4_2 }
+
+function TSolver2019_4_2.Solve(Input: String): String;
+begin
+
 end;
 
 end.

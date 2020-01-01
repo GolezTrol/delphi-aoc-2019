@@ -21,7 +21,8 @@ uses
   Puzzle.Y2019.Tests in 'Puzzle.Y2019.Tests.pas',
   Aoc.TestCase.Attribute in 'Aoc.TestCase.Attribute.pas',
   IntCode.Processor.Tests in 'IntCode.Processor.Tests.pas',
-  Wiring.Tests in 'Wiring.Tests.pas';
+  Wiring.Tests in 'Wiring.Tests.pas',
+  Password.Tests in 'Password.Tests.pas';
 
 {$R *.RES}
 

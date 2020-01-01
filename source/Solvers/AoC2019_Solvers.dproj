@@ -96,6 +96,7 @@
         <DCCReference Include="IntCode.Processor.pas"/>
         <DCCReference Include="AoC.Types.pas"/>
         <DCCReference Include="Wiring.pas"/>
+        <DCCReference Include="Password.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

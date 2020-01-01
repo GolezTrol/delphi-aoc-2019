@@ -87,6 +87,7 @@
         <DCCReference Include="Aoc.TestCase.Attribute.pas"/>
         <DCCReference Include="IntCode.Processor.Tests.pas"/>
         <DCCReference Include="Wiring.Tests.pas"/>
+        <DCCReference Include="Password.Tests.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
