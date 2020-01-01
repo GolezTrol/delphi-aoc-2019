@@ -19,6 +19,11 @@ type
     procedure Wires_WhenIntersecting_ReturnsAllLocations;
     [Test]
     procedure Manhattan_Distance;
+    [Test]
+    procedure Line_Distance;
+    [Test]
+    procedure Segment_Distance;
+
   end;
 
 implementation
@@ -26,6 +31,22 @@ implementation
 uses
   AoC.Types,
   Wiring;
+
+procedure TWiringTests.Line_Distance;
+  procedure Check(Expected: Integer; Wire: TWire; Location: TGridLocation);
+  begin
+    Assert.AreEqual(Expected, TWiring.LineDistance(Wire, Location));
+  end;
+begin
+  Check(
+    10, [
+      TGridLocation.Create(3,3),
+      TGridLocation.Create(10,3), // 7
+      TGridLocation.Create(10,8) // 12
+    ],
+    TGridLocation.Create(10, 6) // Third-last position, expect length-2 = 10
+  );
+end;
 
 procedure TWiringTests.Manhattan_Distance;
   procedure Check(Expected, X1, Y1, X2, Y2: Integer);
@@ -97,6 +118,30 @@ begin
   // Parallel but not overlapping obviously is false too.
   Assert.IsFalse(TWiring.FindIntersection(
       TSegment.Create(1,10, 5,10), TSegment.Create(1,8, 5,8), Location));
+end;
+
+procedure TWiringTests.Segment_Distance;
+var
+  Segment: TSegment;
+  procedure CheckUntil(Test: String; ExpectedResult: Boolean; ExpectedLength: Integer; Location: TGridLocation);
+  var
+    ActualLength: Integer;
+  begin
+    Assert.AreEqual(ExpectedResult, Segment.LengthUntil(Location, ActualLength), Test);
+    Assert.AreEqual(ExpectedLength, ActualLength, Test);
+  end;
+begin
+  Segment := TSegment.Create(5,5, 15,5);
+  // Basic length
+  Assert.AreEqual(10, Segment.Length);
+  // Full length if no match
+  CheckUntil('None', False, 10, TGridLocation.Create(8,4));
+  // Full length if on end
+  CheckUntil('End', True, 10, TGridLocation.Create(15,5));
+  // Zero length if on start
+  CheckUntil('Start', True, 0, TGridLocation.Create(5,5));
+  // length if halfway
+  CheckUntil('Halfway', True, 2, TGridLocation.Create(7,5));
 end;
 
 procedure TWiringTests.Wires_WhenIntersecting_ReturnsAllLocations;

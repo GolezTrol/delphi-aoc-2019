@@ -24,6 +24,9 @@ type
   TSolver2019_3_1 = class(TInterfacedObject, ISolver)
     function Solve(Input: String): String;
   end;
+  TSolver2019_3_2 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
 
 implementation
 
@@ -141,6 +144,37 @@ begin
       MinDistance := Distance;
   end;
   Result := MinDistance.ToString();
+end;
+
+{ TSolver2019_3_2 }
+
+function TSolver2019_3_2.Solve(Input: String): String;
+var
+  Wires: TStringArray;
+  Wire1, Wire2: TWire;
+  Intersections: TIntersections;
+  Steps, MinSteps: Integer;
+  Distance: Integer;
+  Intersection: TGridLocation;
+  Origin: TGridLocation;
+begin
+  MinSteps := MaxInt;
+  Origin := TGridLocation.Create(0, 0);
+  Wires := TInput.StringPerLine(Input);
+  Wire1 := TInput.Wire(Wires[0]);
+  Wire2 := TInput.Wire(Wires[1]);
+  Intersections := TWiring.FindIntersections(Wire1, Wire2);
+  for Intersection in Intersections do
+  begin
+    Distance := TWiring.ManhattanDistance(Origin, Intersection);
+    if Distance > 0 then
+    begin
+      Steps := TWiring.LineDistance(Wire1, Intersection) + TWiring.LineDistance(Wire2, Intersection);
+      if Steps < MinSteps then
+        MinSteps := Steps;
+    end;
+  end;
+  Result := MinSteps.ToString();
 end;
 
 end.

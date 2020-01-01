@@ -2,6 +2,9 @@ unit AoC.Types;
 
 interface
 
+uses
+  Math;
+
 type
   TIntegerArray = TArray<Integer>;
   TStringArray = TArray<String>;
@@ -17,6 +20,8 @@ type
     constructor Create(AX1, AY1, AX2, AY2: Integer);
     function Orientation: TSegmentOrientation;
     function Normalized: TSegment;
+    function Length: Integer;
+    function LengthUntil(Location: TGridLocation; out ALength: Integer): Boolean;
     case Integer of
       1:
       (
@@ -47,6 +52,31 @@ begin
   Y1 := AY1;
   X2 := AX2;
   Y2 := AY2;
+end;
+
+function TSegment.Length: Integer;
+begin
+  Result := Abs((X1-X2) + (Y1-Y2));
+end;
+
+function TSegment.LengthUntil(Location: TGridLocation;
+  out ALength: Integer): Boolean;
+
+  function Between(const P, A, B: Integer; out L: Integer): Boolean; inline;
+  begin
+    if (P < Min(A,B)) or (P > Max(A, B)) then
+      Exit(False);
+
+    L := Abs(P-A);
+    Exit(True);
+  end;
+begin
+  if Orientation = soX then
+    Result := (Location.X = Self.X1) and Between(Location.Y, Self.Y1, Self.Y2, ALength)
+  else
+    Result := (Location.Y = Self.Y1) and Between(Location.X, Self.X1, Self.X2, ALength);
+  if not Result then
+    ALength := Self.Length;
 end;
 
 function TSegment.Normalized: TSegment;
