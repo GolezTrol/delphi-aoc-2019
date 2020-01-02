@@ -47,9 +47,9 @@ var
     Inc(Position);
   end;
 
-  function ReadMode: Integer;
+  function ReadParam: Integer;
   const
-    MODE_ADDRESS = 0;
+    MODE_POSITION = 0;
     MODE_IMMEDATE = 1;
   var
     Mode: Integer;
@@ -61,13 +61,19 @@ var
     Mode := (Modes div Trunc(IntPower(10, ModeIndex))) mod 10;
     Inc(ModeIndex);
 
-    if Mode = MODE_ADDRESS then
+    if Mode = MODE_POSITION then
       Result := Code[Result]
   end;
 
   procedure Write(const Value, Addr: Integer);
   begin
     Code[Addr] := Value;
+  end;
+
+  procedure Jump(const Condition: Boolean; const Addr: Integer);
+  begin
+    if Condition then
+      Position := Addr;
   end;
 
 begin
@@ -79,13 +85,21 @@ begin
     OpCode := OpCode mod 100;
     case OpCode of
       1: // Add
-        Write(ReadMode+ReadMode, ReadValue);
+        Write(ReadParam+ReadParam, ReadValue);
       2: // Multiply
-        Write(ReadMode*ReadMode, ReadValue);
+        Write(ReadParam*ReadParam, ReadValue);
       3: // Store input
         Write(FIO.Read, ReadValue);
       4: // Read output
-        FIO.Write(ReadMode);
+        FIO.Write(ReadParam);
+      5: // Jump if true
+        Jump(ReadParam <> 0, ReadParam);
+      6: // Jump if false
+        Jump(ReadParam = 0, ReadParam);
+      7: // Less than
+        Write(Ord(ReadParam < ReadParam), ReadValue);
+      8: // Equal
+        Write(Ord(ReadParam = ReadParam), ReadValue);
       99:
         Break;
     else
