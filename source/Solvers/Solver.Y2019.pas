@@ -3,6 +3,7 @@ unit Solver.Y2019;
 interface
 
 uses
+  IntCode.Processor,
   Solver.Intf;
 
 type
@@ -34,6 +35,18 @@ type
   TSolver2019_4_2 = class(TInterfacedObject, ISolver)
     function Solve(Input: String): String;
   end;
+  // Day 5: Sunny with a Chance of Asteroids
+  TSolver2019_5_1 = class(TInterfacedObject, ISolver, IIO)
+    function Solve(Input: String): String;
+  private // IIO
+    FValue: Integer;
+    FOutputCount: Integer;
+    function Read: Integer;
+    procedure Write(Value: Integer);
+  end;
+  TSolver2019_5_2 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
 
 implementation
 
@@ -42,7 +55,6 @@ uses
   AoC.Types,
   InputUtils,
   Module.Fuel,
-  IntCode.Processor,
   Wiring,
   Password;
 
@@ -215,6 +227,40 @@ begin
     if TPassword.Validate2(i.ToString) then
       Inc(Count);
   Result := Count.ToString;
+end;
+
+{ TSolver2019_5_1 }
+
+function TSolver2019_5_1.Read: Integer;
+begin
+  Result := 1; // the ID for the ship's air conditioner unit.
+end;
+
+function TSolver2019_5_1.Solve(Input: String): String;
+var
+  Code: TIntegerArray;
+begin
+  with TIntCodeProcessor.Create(Self) do
+  try
+    Code := TInput.IntCommaSeparated(Input);
+    Execute(Code);
+    Result := FValue.ToString;
+  finally
+    Free;
+  end;
+end;
+
+procedure TSolver2019_5_1.Write(Value: Integer);
+begin
+  FValue := Value;
+  Inc(FOutputCount);
+end;
+
+{ TSolver2019_5_2 }
+
+function TSolver2019_5_2.Solve(Input: String): String;
+begin
+
 end;
 
 end.

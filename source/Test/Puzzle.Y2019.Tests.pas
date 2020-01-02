@@ -70,6 +70,10 @@ type
     [AoCTestCase('2019.4.2', '112233-112233', '1' )]
     [AoCTestCase('2019.4.2', '123444-123444', '0' )]
     [AoCTestCase('2019.4.2', '111120-111123', '1' )] // Finds only 111122
+
+    // Day 5: Sunny with a Chance of Asteroids
+    [AoCTestCase('2019.5.1', '4,3,99,23456', '23456' )] // Outputs number at address 3
+    [AoCTestCase('2019.5.1', '104,3,99,23456', '3' )] // Outputs immediate 3
     procedure Tests(const Puzzle, Input, ExpectedResult: String);
   end;
 
