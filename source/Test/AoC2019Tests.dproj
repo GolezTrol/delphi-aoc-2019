@@ -89,6 +89,7 @@
         <DCCReference Include="Wiring.Tests.pas"/>
         <DCCReference Include="Password.Tests.pas"/>
         <DCCReference Include="Orbit.Map.Tests.pas"/>
+        <DCCReference Include="Permutation.Tests.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

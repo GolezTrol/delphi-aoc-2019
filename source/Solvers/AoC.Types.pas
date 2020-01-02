@@ -7,6 +7,7 @@ uses
 
 type
   TIntegerArray = TArray<Integer>;
+  TIntegerArrayArray = TArray<TIntegerArray>; // For permutations
   TStringArray = TArray<String>;
 
   TGridLocation = record
