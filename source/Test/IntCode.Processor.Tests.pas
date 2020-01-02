@@ -5,22 +5,18 @@ interface
 uses
   SysUtils,
   DUnitX.TestFramework,
+  IntCode.Types,
+  IntCode.IO,
   IntCode.Processor,
   InputUtils,
   AoC.Types;
 
 type
-  TTestIO = class(TInterfacedObject, IIO)
-    Value: Integer;
-    function Read: Integer;
-    procedure Write(AValue: Integer);
-  end;
-
   [TestFixture]
   TIntCodeProcessorTests = class(TObject)
   private
     FProcessor: TIntCodeProcessor;
-    FIO: TTestIO;
+    FIO: IIntCodeArrayIO;
   public
     [Setup]
     procedure Setup;
@@ -62,11 +58,17 @@ type
     [TestCase('Multiple statements', '1,1,1,4,99,5,6,0,99|30,1,1,4,2,5,6,0,99', '|')]
     // Negative numbers
     [TestCase('Add immedate', '1101,100,-1,4,0|1101,100,-1,4,99', '|')] // (100+-1).
+    //
+    [TestCase('Add immedate', '1101,100,-1,4,0|1101,100,-1,4,99', '|')] // (100+-1).
     procedure TestExecute(const Input: String; const Expected: String);
 
     [Test]
     [TestCase('Output Position', '4,3,99,23456|23456', '|')]
     [TestCase('Output Immediate', '104,3,99,23456|3', '|')]
+    // A given puzzle example.
+    // The program will then output 999 if the input value is below 8, output 1000 if the input value is equal to 8, or output 1001 if the input value is greater than 8.
+    // Since our input is 12345, the output should be 1001
+    [TestCase('Complex program', '3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99|1001', '|')]
     procedure TestOutput(const Input: String; const Expected: String);
 
     [TestCase('Multiple statements', '1,1,1,4,99,5,6,0,99|30', '|')]
@@ -77,7 +79,7 @@ implementation
 
 procedure TIntCodeProcessorTests.Setup;
 begin
-  FIO := TTestIO.Create;
+  FIO := TIntCodeArrayIO.Create([12345]);
   FProcessor := TIntCodeProcessor.Create(FIO);
 end;
 
@@ -112,22 +114,13 @@ end;
 procedure TIntCodeProcessorTests.TestOutput(const Input, Expected: String);
 var
   Code: TIntegerArray;
+  Outputs: TIntegerArray;
 begin
   Code := TInput.IntCommaSeparated(Input);
   FProcessor.Execute(Code);
-  Assert.AreEqual(Expected, FIO.Value.ToString);
-end;
-
-{ TTestInput }
-
-function TTestIO.Read: Integer;
-begin
-  Result := 12345;
-end;
-
-procedure TTestIO.Write(AValue: Integer);
-begin
-  Value := AValue;
+  Outputs := FIO.GetOutputs;
+  Assert.AreEqual(1, Length(Outputs), 'Number of output values');
+  Assert.AreEqual(Expected, Outputs[0].ToString, 'First/only output value');
 end;
 
 initialization

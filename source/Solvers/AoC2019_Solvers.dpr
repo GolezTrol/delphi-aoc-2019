@@ -14,7 +14,9 @@ uses
   IntCode.Processor in 'IntCode.Processor.pas',
   AoC.Types in 'AoC.Types.pas',
   Wiring in 'Wiring.pas',
-  Password in 'Password.pas';
+  Password in 'Password.pas',
+  IntCode.Types in 'IntCode.Types.pas',
+  IntCode.IO in 'IntCode.IO.pas';
 
 {$R *.res}
 

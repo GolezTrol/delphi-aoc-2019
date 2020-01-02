@@ -72,8 +72,14 @@ type
     [AoCTestCase('2019.4.2', '111120-111123', '1' )] // Finds only 111122
 
     // Day 5: Sunny with a Chance of Asteroids
+    // Diagnose Airco
     [AoCTestCase('2019.5.1', '4,3,99,23456', '23456' )] // Outputs number at address 3
     [AoCTestCase('2019.5.1', '104,3,99,23456', '3' )] // Outputs immediate 3
+
+    // Diagnose thermal radiator controller (ID = 5)
+    // Program will take input. If input is <, = or > 8, it will output 999, 1000, 1001 respectively.
+    // For the puzzle, the input is 5.
+    [AoCTestCase('2019.5.2', '3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99', '999')]
     procedure Tests(const Puzzle, Input, ExpectedResult: String);
   end;
 

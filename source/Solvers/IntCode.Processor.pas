@@ -5,18 +5,10 @@ interface
 uses
   AoC.Types,
   SysUtils,
-  Math;
+  Math,
+  IntCode.Types;
 
 type
-  EIntCode = class(Exception);
-  EInvalidOpCode = class(EIntCode);
-
-  IIO = interface
-    ['{83FEF665-616E-4CD4-A9E8-CBBDA5392649}']
-    function Read: Integer;
-    procedure Write(Value: Integer);
-  end;
-
   TIntCodeProcessor = class(TInterfacedObject)
   private
     FIO: IIO;

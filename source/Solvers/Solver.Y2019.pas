@@ -3,7 +3,7 @@ unit Solver.Y2019;
 interface
 
 uses
-  IntCode.Processor,
+  IntCode.Types,
   Solver.Intf;
 
 type
@@ -36,13 +36,8 @@ type
     function Solve(Input: String): String;
   end;
   // Day 5: Sunny with a Chance of Asteroids
-  TSolver2019_5_1 = class(TInterfacedObject, ISolver, IIO)
+  TSolver2019_5_1 = class(TInterfacedObject, ISolver)
     function Solve(Input: String): String;
-  private // IIO
-    FValue: Integer;
-    FOutputCount: Integer;
-    function Read: Integer;
-    procedure Write(Value: Integer);
   end;
   TSolver2019_5_2 = class(TInterfacedObject, ISolver)
     function Solve(Input: String): String;
@@ -56,7 +51,9 @@ uses
   InputUtils,
   Module.Fuel,
   Wiring,
-  Password;
+  Password,
+  IntCode.Processor,
+  IntCode.IO;
 
 { TSolver2019_1_1 }
 
@@ -230,37 +227,44 @@ begin
 end;
 
 { TSolver2019_5_1 }
-
-function TSolver2019_5_1.Read: Integer;
-begin
-  Result := 1; // the ID for the ship's air conditioner unit.
-end;
-
 function TSolver2019_5_1.Solve(Input: String): String;
 var
   Code: TIntegerArray;
+  IO: IIntCodeArrayIO;
 begin
-  with TIntCodeProcessor.Create(Self) do
+  IO := TIntCodeArrayIO.Create([
+    1 // the ID for the ship's air conditioner unit.
+  ]);
+
+  with TIntCodeProcessor.Create(IO) do
   try
     Code := TInput.IntCommaSeparated(Input);
     Execute(Code);
-    Result := FValue.ToString;
+    Result := IO.GetLastOutput.ToString;
   finally
     Free;
   end;
 end;
 
-procedure TSolver2019_5_1.Write(Value: Integer);
-begin
-  FValue := Value;
-  Inc(FOutputCount);
-end;
-
 { TSolver2019_5_2 }
 
 function TSolver2019_5_2.Solve(Input: String): String;
+var
+  Code: TIntegerArray;
+  IO: IIntCodeArrayIO;
 begin
+  IO := TIntCodeArrayIO.Create([
+    5 // the ID for the ship's thermal radiator controller
+  ]);
 
+  with TIntCodeProcessor.Create(IO) do
+  try
+    Code := TInput.IntCommaSeparated(Input);
+    Execute(Code);
+    Result := IO.GetLastOutput.ToString;
+  finally
+    Free;
+  end;
 end;
 
 end.
