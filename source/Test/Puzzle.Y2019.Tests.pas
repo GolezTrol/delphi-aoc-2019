@@ -80,6 +80,11 @@ type
     // Program will take input. If input is <, = or > 8, it will output 999, 1000, 1001 respectively.
     // For the puzzle, the input is 5.
     [AoCTestCase('2019.5.2', '3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99', '999')]
+
+    // Day 6: Universal Orbit Map
+    // Day 6, 1: Checksum
+    [AoCTestCase('2019.6.1', 'COM)B'#13'B)C'#13'C)D'#13'D)E'#13'E)F'#13'B)G'#13'G)H'#13'D)I'#13'E)J'#13'J)K'#13'K)L', '42')]
+
     procedure Tests(const Puzzle, Input, ExpectedResult: String);
   end;
 

@@ -13,6 +13,7 @@ type
     class function StringCommaSeparated(Input: String): TStringArray;
     class function Wire(Input: String): TWire;
     class procedure Range(Input: String; out A, B: Integer);
+    class procedure Orbit(Input: STring; out Parent, Body: String);
   end;
 
 implementation
@@ -52,6 +53,15 @@ begin
   finally
     sl.Free;
   end;
+end;
+
+class procedure TInput.Orbit(Input: STring; out Parent, Body: String);
+var
+  p: Integer;
+begin
+  p := Pos(')', Input);
+  Parent := Copy(Input, 1, p-1);
+  Body := Copy(Input, p+1, Length(Input));
 end;
 
 class procedure TInput.Range(Input: String; out A, B: Integer);

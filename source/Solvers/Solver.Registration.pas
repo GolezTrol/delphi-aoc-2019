@@ -11,6 +11,9 @@ procedure Register(Container: TContainer);
 implementation
 
 uses
+  System.Rtti,
+  SysUtils,
+  Classes,
   Solver.Y2019;
 
 procedure Register(Container: TContainer);
@@ -25,6 +28,8 @@ begin
   Container.RegisterType<ISolver, TSolver2019_4_2>('2019.4.2');
   Container.RegisterType<ISolver, TSolver2019_5_1>('2019.5.1');
   Container.RegisterType<ISolver, TSolver2019_5_2>('2019.5.2');
+  Container.RegisterType<ISolver, TSolver2019_6_1>('2019.6.1');
+  Container.RegisterType<ISolver, TSolver2019_6_2>('2019.6.2');
 end;
 
 end.

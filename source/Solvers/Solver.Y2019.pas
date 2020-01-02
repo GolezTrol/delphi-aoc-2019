@@ -42,6 +42,13 @@ type
   TSolver2019_5_2 = class(TInterfacedObject, ISolver)
     function Solve(Input: String): String;
   end;
+  // Day 6: Universal Orbit Map
+  TSolver2019_6_1 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
+  TSolver2019_6_2 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
 
 implementation
 
@@ -53,7 +60,8 @@ uses
   Wiring,
   Password,
   IntCode.Processor,
-  IntCode.IO;
+  IntCode.IO,
+  Orbit.Map;
 
 { TSolver2019_1_1 }
 
@@ -265,6 +273,39 @@ begin
   finally
     Free;
   end;
+end;
+
+{ TSolver2019_6_1 }
+
+function TSolver2019_6_1.Solve(Input: String): String;
+var
+  Orbits: TStringArray;
+  Map: TOrbitMap;
+  Orbit, Parent, Body: String;
+  TotalDepth: Integer;
+begin
+  TotalDepth := 0;
+  Orbits := TInput.StringPerLine(Input);
+  Map := TOrbitMap.Create;
+  try
+    for Orbit in Orbits do
+    begin
+      TInput.Orbit(Orbit, Parent, Body);
+      Map.AddBody(Body, Parent);
+    end;
+    for Orbit in Map.GetBodies.Keys do
+      Inc(TotalDepth, Map.GetOrbitLevel(Orbit));
+    Result := TotalDepth.ToString();
+  finally
+    Map.Free;
+  end;
+end;
+
+{ TSolver2019_6_2 }
+
+function TSolver2019_6_2.Solve(Input: String): String;
+begin
+
 end;
 
 end.

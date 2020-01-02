@@ -3,7 +3,7 @@ unit AoC.Types;
 interface
 
 uses
-  Math;
+  Math, Spring.Collections;
 
 type
   TIntegerArray = TArray<Integer>;
@@ -33,6 +33,14 @@ type
       );
   end;
   TSegments = array of TSegment;
+
+  TBody = class
+    ID: String;
+    Parent: TBody;
+  end;
+
+  IBodies = IDictionary<String, TBody>;
+  IReadBodies = IReadOnlyDictionary<String, TBody>;
 
 implementation
 

@@ -99,6 +99,8 @@
         <DCCReference Include="Password.pas"/>
         <DCCReference Include="IntCode.Types.pas"/>
         <DCCReference Include="IntCode.IO.pas"/>
+        <DCCReference Include="Orbit.Map.pas"/>
+        <DCCReference Include="..\Test\Orbit.Map.Tests.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
