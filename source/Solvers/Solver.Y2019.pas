@@ -279,33 +279,33 @@ end;
 
 function TSolver2019_6_1.Solve(Input: String): String;
 var
-  Orbits: TStringArray;
-  Map: TOrbitMap;
-  Orbit, Parent, Body: String;
+  Orbit: String;
   TotalDepth: Integer;
 begin
   TotalDepth := 0;
-  Orbits := TInput.StringPerLine(Input);
-  Map := TOrbitMap.Create;
+  with TInput.CreateOrbitMap(Input) do
   try
-    for Orbit in Orbits do
-    begin
-      TInput.Orbit(Orbit, Parent, Body);
-      Map.AddBody(Body, Parent);
-    end;
-    for Orbit in Map.GetBodies.Keys do
-      Inc(TotalDepth, Map.GetOrbitLevel(Orbit));
+    for Orbit in GetBodies.Keys do
+      Inc(TotalDepth, GetOrbitLevel(Orbit));
     Result := TotalDepth.ToString();
   finally
-    Map.Free;
+    Free;
   end;
 end;
 
 { TSolver2019_6_2 }
-
 function TSolver2019_6_2.Solve(Input: String): String;
+var
+  Orbit: String;
+  TotalDepth: Integer;
 begin
-
+  TotalDepth := 0;
+  with TInput.CreateOrbitMap(Input) do
+  try
+    Result := GetDistance('YOU', 'SAN').ToString();
+  finally
+    Free;
+  end;
 end;
 
 end.

@@ -17,8 +17,7 @@ uses
   Password in 'Password.pas',
   IntCode.Types in 'IntCode.Types.pas',
   IntCode.IO in 'IntCode.IO.pas',
-  Orbit.Map in 'Orbit.Map.pas',
-  Orbit.Map.Tests in '..\Test\Orbit.Map.Tests.pas';
+  Orbit.Map in 'Orbit.Map.pas';
 
 {$R *.res}
 

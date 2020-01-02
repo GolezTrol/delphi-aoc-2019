@@ -14,6 +14,8 @@ type
     destructor Destroy; override;
     procedure AddBody(const ID, Parent: String);
     function GetOrbitLevel(const ID: String): Integer;
+    function GetPath(const ID: String): TStringArray;
+    function GetDistance(const ID1, ID2: String): Integer;
     function GetBodies: IBodies;
   end;
 
@@ -66,6 +68,27 @@ begin
   Result := FBodies;
 end;
 
+function TOrbitMap.GetDistance(const ID1, ID2: String): Integer;
+var
+  Path1: TStringArray;
+  Path2: TStringArray;
+  i1, i2: Integer;
+begin
+  Path1 := GetPath(ID1);
+  Path2 := GetPath(ID2);
+  i1 := High(Path1);
+  i2 := High(Path2);
+  if (i1 < 0) or (i2 < 0) then
+    Exit(-1); // At least one of the bodies is not found. Return -1 as error code.
+
+  while (i1 > 0) and (i2 > 0) and (Path1[i1] = Path2[i2]) do
+  begin
+    Dec(i1);
+    Dec(i2);
+  end;
+  Result := i1 + i2;
+end;
+
 function TOrbitMap.GetOrbitLevel(const ID: String): Integer;
 var
   Body: TBody;
@@ -78,6 +101,18 @@ begin
       Body := Body.Parent;
     until Body = nil;
   end;
+end;
+
+function TOrbitMap.GetPath(const ID: String): TStringArray;
+var
+  Body: TBody;
+begin
+  if FBodies.TryGetValue(ID, Body) then
+  repeat
+    SetLength(Result, Length(Result) + 1);
+    Result[High(Result)] := Body.ID;
+    Body := Body.Parent;
+  until Body = nil;
 end;
 
 end.

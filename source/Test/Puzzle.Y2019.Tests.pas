@@ -84,7 +84,8 @@ type
     // Day 6: Universal Orbit Map
     // Day 6, 1: Checksum
     [AoCTestCase('2019.6.1', 'COM)B'#13'B)C'#13'C)D'#13'D)E'#13'E)F'#13'B)G'#13'G)H'#13'D)I'#13'E)J'#13'J)K'#13'K)L', '42')]
-
+    // Day 6, 1: Distance from YOU to SAN
+    [AoCTestCase('2019.6.2', 'COM)B'#13'B)C'#13'C)D'#13'D)E'#13'E)F'#13'B)G'#13'G)H'#13'D)I'#13'E)J'#13'J)K'#13'K)L'#13'K)YOU'#13'I)SAN', '4')]
     procedure Tests(const Puzzle, Input, ExpectedResult: String);
   end;
 

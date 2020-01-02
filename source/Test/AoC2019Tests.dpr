@@ -22,7 +22,8 @@ uses
   Aoc.TestCase.Attribute in 'Aoc.TestCase.Attribute.pas',
   IntCode.Processor.Tests in 'IntCode.Processor.Tests.pas',
   Wiring.Tests in 'Wiring.Tests.pas',
-  Password.Tests in 'Password.Tests.pas';
+  Password.Tests in 'Password.Tests.pas',
+  Orbit.Map.Tests in 'Orbit.Map.Tests.pas';
 
 {$R *.RES}
 

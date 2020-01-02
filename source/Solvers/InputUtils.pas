@@ -3,7 +3,8 @@ unit InputUtils;
 interface
 
 uses
-  AoC.Types;
+  AoC.Types,
+  Orbit.Map;
 
 type
   TInput = class
@@ -13,13 +14,35 @@ type
     class function StringCommaSeparated(Input: String): TStringArray;
     class function Wire(Input: String): TWire;
     class procedure Range(Input: String; out A, B: Integer);
-    class procedure Orbit(Input: STring; out Parent, Body: String);
+    class procedure Orbit(Input: String; out Parent, Body: String);
+    class function CreateOrbitMap(Input: String): TOrbitMap;
   end;
 
 implementation
 
 uses
   Classes, SysUtils;
+
+class function TInput.CreateOrbitMap(Input: String): TOrbitMap;
+var
+  Orbits: TStringArray;
+  Map: TOrbitMap;
+  Orbit, Parent, Body: String;
+begin
+  Orbits := TInput.StringPerLine(Input);
+  Map := TOrbitMap.Create;
+  try
+    for Orbit in Orbits do
+    begin
+      TInput.Orbit(Orbit, Parent, Body);
+      Map.AddBody(Body, Parent);
+    end;
+  except
+    Map.Free;
+    raise;
+  end;
+  Result := Map;
+end;
 
 class function TInput.IntCommaSeparated(Input: String): TIntegerArray;
 var
