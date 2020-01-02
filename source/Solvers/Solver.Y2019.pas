@@ -88,7 +88,7 @@ function TSolver2019_2_1.Solve(Input: String): String;
 var
   Code: TIntegerArray;
 begin
-  with TIntCodeProcessor.Create do
+  with TIntCodeProcessor.Create(nil) do
   try
     Code := TInput.IntCommaSeparated(Input);
     Code[1] := 12;
@@ -108,7 +108,7 @@ var
   Code: TIntegerArray;
   Noun, Verb: Integer;
 begin
-  with TIntCodeProcessor.Create do
+  with TIntCodeProcessor.Create(nil) do
   try
     Code := TInput.IntCommaSeparated(Input);
     for Noun := 0 to 99 do

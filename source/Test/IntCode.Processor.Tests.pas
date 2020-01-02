@@ -32,10 +32,15 @@ type
     [TestCase('Mul 2', '2,4,4,5,99,0|2,4,4,5,99,9801', '|')] // (99 * 99 = 9801).
     [TestCase('Multiple statements', '1,1,1,4,99,5,6,0,99|30,1,1,4,2,5,6,0,99', '|')]
     [TestCase('Input', '3,0,99|12345,0,99', '|')]
+    // Immediate mode
+    [TestCase('Add immedate', '1001,0,2,0,99|1003,0,2,0,99', '|')] // (1001 + 2 = 1003).
+    // Negative numbers
+    [TestCase('Add immedate', '1101,100,-1,4,0|1101,100,-1,4,99', '|')] // (100+-1).
     procedure TestExecute(const Input: String; const Expected: String);
 
     [Test]
     [TestCase('Output', '4,3,99,23456|23456', '|')]
+    [TestCase('Output', '104,3,99,23456|3', '|')]
     procedure TestOutput(const Input: String; const Expected: String);
 
     [TestCase('Multiple statements', '1,1,1,4,99,5,6,0,99|30', '|')]

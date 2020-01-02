@@ -4,7 +4,8 @@ interface
 
 uses
   AoC.Types,
-  SysUtils;
+  SysUtils,
+  Math;
 
 type
   EIntCode = class(Exception);
@@ -35,17 +36,33 @@ end;
 procedure TIntCodeProcessor.Execute(var Code: TIntegerArray);
 var
   Position: Integer;
+  Modes: Integer;
+  ModeIndex: Integer;
   OpCode: Integer;
 
-  function ReadInc: Integer;
+  function ReadValue: Integer;
   begin
+    // Read a value and increment the position
     Result := Code[Position];
     Inc(Position);
   end;
 
-  function ReadAddr: Integer;
+  function ReadMode: Integer;
+  const
+    MODE_ADDRESS = 0;
+    MODE_IMMEDATE = 1;
+  var
+    Mode: Integer;
   begin
-    Result := Code[ReadInc];
+    // Read a value, and depending on the mode, use it immediately, or use it
+    // as an address for reading from.
+    Result := ReadValue;
+
+    Mode := (Modes div Trunc(IntPower(10, ModeIndex))) mod 10;
+    Inc(ModeIndex);
+
+    if Mode = MODE_ADDRESS then
+      Result := Code[Result]
   end;
 
   procedure Write(const Value, Addr: Integer);
@@ -56,16 +73,19 @@ var
 begin
   Position := 0;
   repeat
-    OpCode := ReadInc;
+    OpCode := ReadValue;
+    Modes := OpCode div 100;
+    ModeIndex := 0;
+    OpCode := OpCode mod 100;
     case OpCode of
       1: // Add
-        Write(ReadAddr+ReadAddr, ReadInc);
+        Write(ReadMode+ReadMode, ReadValue);
       2: // Multiply
-        Write(ReadAddr*ReadAddr, ReadInc);
+        Write(ReadMode*ReadMode, ReadValue);
       3: // Store input
-        Write(FIO.Read, ReadInc);
+        Write(FIO.Read, ReadValue);
       4: // Read output
-        FIO.Write(ReadAddr);
+        FIO.Write(ReadMode);
       99:
         Break;
     else
