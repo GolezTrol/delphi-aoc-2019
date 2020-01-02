@@ -10,12 +10,27 @@ type
   EIntCode = class(Exception);
   EInvalidOpCode = class(EIntCode);
 
-  TIntCodeProcessor = class
+  IIO = interface
+    ['{83FEF665-616E-4CD4-A9E8-CBBDA5392649}']
+    function Read: Integer;
+    procedure Write(Value: Integer);
+  end;
+
+  TIntCodeProcessor = class(TInterfacedObject)
+  private
+    FIO: IIO;
+  public
+    constructor Create(AInput: IIO);
     procedure Execute(var Code: TIntegerArray);
     function ExecuteScalar(const Code: TIntegerArray): Integer;
   end;
 
 implementation
+
+constructor TIntCodeProcessor.Create(AInput: IIO);
+begin
+  FIO := AInput;
+end;
 
 procedure TIntCodeProcessor.Execute(var Code: TIntegerArray);
 var
@@ -47,6 +62,10 @@ begin
         Write(ReadAddr+ReadAddr, ReadInc);
       2: // Multiply
         Write(ReadAddr*ReadAddr, ReadInc);
+      3: // Store input
+        Write(FIO.Read, ReadInc);
+      4: // Read output
+        FIO.Write(ReadAddr);
       99:
         Break;
     else

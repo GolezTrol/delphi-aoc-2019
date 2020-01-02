@@ -10,10 +10,17 @@ uses
   AoC.Types;
 
 type
+  TTestIO = class(TInterfacedObject, IIO)
+    Value: Integer;
+    function Read: Integer;
+    procedure Write(AValue: Integer);
+  end;
+
   [TestFixture]
   TIntCodeProcessorTests = class(TObject)
   private
     FProcessor: TIntCodeProcessor;
+    FIO: TTestIO;
   public
     [Setup]
     procedure Setup;
@@ -24,7 +31,12 @@ type
     [TestCase('Mul 1', '2,3,0,3,99|2,3,0,6,99', '|')] // (3 * 2 = 6).
     [TestCase('Mul 2', '2,4,4,5,99,0|2,4,4,5,99,9801', '|')] // (99 * 99 = 9801).
     [TestCase('Multiple statements', '1,1,1,4,99,5,6,0,99|30,1,1,4,2,5,6,0,99', '|')]
+    [TestCase('Input', '3,0,99|12345,0,99', '|')]
     procedure TestExecute(const Input: String; const Expected: String);
+
+    [Test]
+    [TestCase('Output', '4,3,99,23456|23456', '|')]
+    procedure TestOutput(const Input: String; const Expected: String);
 
     [TestCase('Multiple statements', '1,1,1,4,99,5,6,0,99|30', '|')]
     procedure TestExecuteScalar(const Input: String; const Expected: String);
@@ -34,7 +46,8 @@ implementation
 
 procedure TIntCodeProcessorTests.Setup;
 begin
-  FProcessor := TIntCodeProcessor.Create;
+  FIO := TTestIO.Create;
+  FProcessor := TIntCodeProcessor.Create(FIO);
 end;
 
 procedure TIntCodeProcessorTests.TearDown;
@@ -63,6 +76,27 @@ var
 begin
   Code := TInput.IntCommaSeparated(Input);
   Assert.AreEqual(Expected, FProcessor.ExecuteScalar(Code).ToString);
+end;
+
+procedure TIntCodeProcessorTests.TestOutput(const Input, Expected: String);
+var
+  Code: TIntegerArray;
+begin
+  Code := TInput.IntCommaSeparated(Input);
+  FProcessor.Execute(Code);
+  Assert.AreEqual(Expected, FIO.Value.ToString);
+end;
+
+{ TTestInput }
+
+function TTestIO.Read: Integer;
+begin
+  Result := 12345;
+end;
+
+procedure TTestIO.Write(AValue: Integer);
+begin
+  Value := AValue;
 end;
 
 initialization
