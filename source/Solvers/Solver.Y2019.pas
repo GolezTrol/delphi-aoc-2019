@@ -49,6 +49,13 @@ type
   TSolver2019_6_2 = class(TInterfacedObject, ISolver)
     function Solve(Input: String): String;
   end;
+  // Day 7: Amplification Circuit
+  TSolver2019_7_1 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
+  TSolver2019_7_2 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
 
 implementation
 
@@ -61,7 +68,8 @@ uses
   Password,
   IntCode.Processor,
   IntCode.IO,
-  Orbit.Map;
+  Orbit.Map,
+  Permutation;
 
 { TSolver2019_1_1 }
 
@@ -295,17 +303,64 @@ end;
 
 { TSolver2019_6_2 }
 function TSolver2019_6_2.Solve(Input: String): String;
-var
-  Orbit: String;
-  TotalDepth: Integer;
 begin
-  TotalDepth := 0;
   with TInput.CreateOrbitMap(Input) do
   try
     Result := GetDistance('YOU', 'SAN').ToString();
   finally
     Free;
   end;
+end;
+
+{ TSolver2019_7_1 }
+
+function TSolver2019_7_1.Solve(Input: String): String;
+const
+  PhaseSettings: TIntegerArray = [0,1,2,3,4];
+var
+  Permutations: TIntegerArrayArray;
+  Permutation: TIntegerArray;
+  Code: TIntegerArray;
+  IO: IIntCodeArrayIO;
+  Output, HighestOutput: Integer;
+  PhaseSetting: Integer;
+begin
+  HighestOutput := 0;
+
+  // Try all permutations of the phase settings set.
+  Permutations := TPermutation.GetPermutations(PhaseSettings);
+
+  for Permutation in Permutations do
+  begin
+    Output := 0;
+    // Run each permutation through each of the amplifiers.
+    for PhaseSetting in Permutation do
+    begin
+      // Input for the program is the phase setting and the output of the previous run.
+      IO := TIntCodeArrayIO.Create([PhaseSetting, Output]);
+
+      with TIntCodeProcessor.Create(IO) do
+      try
+        Code := TInput.IntCommaSeparated(Input);
+        Execute(Code);
+        Output := IO.GetLastOutput;
+      finally
+        Free;
+      end;
+    end;
+    // Save the highest output. That leads to the most successful permutation
+    if Output > HighestOutput then
+      HighestOutput := Output;
+  end;
+
+  Result := HighestOutput.ToString;
+end;
+
+{ TSolver2019_7_2 }
+
+function TSolver2019_7_2.Solve(Input: String): String;
+begin
+
 end;
 
 end.

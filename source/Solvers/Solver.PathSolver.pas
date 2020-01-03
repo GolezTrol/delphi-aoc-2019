@@ -42,6 +42,7 @@ var
   Solver: ISolver;
   PuzzleNr: Integer;
   Day: String;
+  Stopwatch: TStopwatch;
 begin
   InputPath := TPath.GetFullPath(InputPath);
   Files := TDirectory.GetFiles(InputPath, '*.txt');
@@ -58,8 +59,9 @@ begin
         // implicitly returning the previous result, initialize the variable before
         // each call.
         Solution := 'No result';
+        Stopwatch := TStopwatch.StartNew;
         Solution := Solver.Solve(Input);
-        CallBack(Puzzle, Solution)
+        CallBack(Puzzle, Solution + '(' + Stopwatch.ElapsedMilliseconds.ToString + 'ms)');
       except
         on E: EResolveException do
           CallBack(Puzzle, 'No solver found')

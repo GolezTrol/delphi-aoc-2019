@@ -86,6 +86,12 @@ type
     [AoCTestCase('2019.6.1', 'COM)B'#13'B)C'#13'C)D'#13'D)E'#13'E)F'#13'B)G'#13'G)H'#13'D)I'#13'E)J'#13'J)K'#13'K)L', '42')]
     // Day 6, 1: Distance from YOU to SAN
     [AoCTestCase('2019.6.2', 'COM)B'#13'B)C'#13'C)D'#13'D)E'#13'E)F'#13'B)G'#13'G)H'#13'D)I'#13'E)J'#13'J)K'#13'K)L'#13'K)YOU'#13'I)SAN', '4')]
+
+    // Day 7: Amplification Circuit
+    // Highest thrust signal. Example programs.
+    [AoCTestCase('2019.7.1', '3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0', '43210')] // (from phase setting sequence 4,3,2,1,0)
+    [AoCTestCase('2019.7.1', '3,23,3,24,1002,24,10,24,1002,23,-1,23,101,5,23,23,1,24,23,23,4,23,99,0,0', '54321')] // (from phase setting sequence 0,1,2,3,4)
+    [AoCTestCase('2019.7.1', '3,31,3,32,1002,32,10,32,1001,31,-2,31,1007,31,0,33,1002,33,7,33,1,33,31,31,1,32,31,31,4,31,99,0,0,0', '65210')] // (from phase setting sequence 1,0,4,3,2)
     procedure Tests(const Puzzle, Input, ExpectedResult: String);
   end;
 
