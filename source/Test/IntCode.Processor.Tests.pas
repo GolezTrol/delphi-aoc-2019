@@ -17,6 +17,8 @@ type
   private
     FProcessor: TIntCodeProcessor;
     FIO: IIntCodeArrayIO;
+  private
+    procedure AssertEqualCode(Expected, Actual: TIntegerArray; Description: String = '');
   public
     [Setup]
     procedure Setup;
@@ -73,9 +75,24 @@ type
 
     [TestCase('Multiple statements', '1,1,1,4,99,5,6,0,99|30', '|')]
     procedure TestExecuteScalar(const Input: String; const Expected: String);
+
+    // Add up 2 and 8 and write to address 0. After getting input, the program does another multiplication (9*10=90)
+    [TestCase('Suspending', '1101,2,6,0,3,1,1102,9,10,2,99|8,2,6,0,3,1,1102,9,10,2,99|8,12345,90,0,3,1,1102,9,10,2,99', '|')]
+    procedure TestSuspension(const Input: String; const First: String; const Final: String);
   end;
 
 implementation
+
+procedure TIntCodeProcessorTests.AssertEqualCode(Expected,
+  Actual: TIntegerArray; Description: String = '');
+var
+  i: Integer;
+begin
+  Assert.AreEqual(Length(Expected), Length(Actual), Description + ', length of codes');
+  if Length(Expected) = Length(Actual) then
+    for i := Low(Actual) to High(Actual) do
+      Assert.AreEqual(Integer(Expected[i]), Actual[i], Description + ', item ' + i.ToString);
+end;
 
 procedure TIntCodeProcessorTests.Setup;
 begin
@@ -96,10 +113,7 @@ begin
   Code := TInput.IntCommaSeparated(Input);
   ExpectedCode := TInput.IntCommaSeparated(Expected);
   FProcessor.Execute(Code);
-  Assert.AreEqual(Length(ExpectedCode), Length(Code), 'Length of codes');
-  if Length(ExpectedCode) = Length(Code) then
-    for i := Low(Code) to High(Code) do
-      Assert.AreEqual(Integer(ExpectedCode[i]), Code[i], 'Item ' + i.ToString);
+  AssertEqualCode(ExpectedCode, Code);
 end;
 
 procedure TIntCodeProcessorTests.TestExecuteScalar(const Input,
@@ -121,6 +135,24 @@ begin
   Outputs := FIO.GetOutputs;
   Assert.AreEqual(1, Length(Outputs), 'Number of output values');
   Assert.AreEqual(Expected, Outputs[0].ToString, 'First/only output value');
+end;
+
+procedure TIntCodeProcessorTests.TestSuspension(const Input, First,
+  Final: String);
+var
+  Prog: TIntCodeProgram;
+  Code: TIntegerArray;
+  Outputs: TIntegerArray;
+begin
+  Prog := TIntCodeProgram.Create(TInput.IntCommaSeparated(Input));
+
+  FProcessor.Run(Prog);
+  Assert.AreEqual(Prog.ProgramState, psSuspended);
+  AssertEqualCode(TInput.IntCommaSeparated(First), Prog.MemDump, 'First');
+  repeat
+    FProcessor.Run(Prog);
+  until Prog.ProgramState = psHalted;
+  AssertEqualCode(TInput.IntCommaSeparated(Final), Prog.MemDump, 'Final');
 end;
 
 initialization

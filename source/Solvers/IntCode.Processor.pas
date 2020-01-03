@@ -9,15 +9,22 @@ uses
   IntCode.Types;
 
 type
-  TProgramState = (psSuspended, psRunning, psHalted);
+  TProgramState = (psUnstarted, psSuspended, psRunning, psHalted);
 
-  TProgram = class
+  TIntCodeProgram = class
   private
-    Code: TIntegerArray;
-    Position: Integer;
-    State: TProgramState;
+    // Global program state
+    Code: TIntegerArray; // The program code/memory
+    Position: Integer; // Instruction pointer
+    State: TProgramState; // Running state
+    // Current instruction.
+    OpCode: Integer; // The opcode
+    Modes: Integer; // Parameter modes
+    ModeIndex: Integer; // Parameter index (for reading from modes)
   public
     constructor Create(ACode: TIntegerArray);
+    property ProgramState: TProgramState read State;
+    property MemDump: TIntegerArray read Code;
   end;
 
   TIntCodeProcessor = class(TInterfacedObject)
@@ -27,7 +34,7 @@ type
     constructor Create(AInput: IIO);
     procedure Execute(var Code: TIntegerArray);
     function ExecuteScalar(const Code: TIntegerArray): Integer;
-    procedure Run(AProgram: TProgram);
+    procedure Run(AProgram: TIntCodeProgram);
   end;
 
 implementation
@@ -39,9 +46,9 @@ end;
 
 procedure TIntCodeProcessor.Execute(var Code: TIntegerArray);
 var
-  p: TProgram;
+  p: TIntCodeProgram;
 begin
-  p := TProgram.Create(Code);
+  p := TIntCodeProgram.Create(Code);
   try
     repeat
       Run(p);
@@ -60,12 +67,7 @@ begin
   Result := CodeCopy[0];
 end;
 
-procedure TIntCodeProcessor.Run(AProgram: TProgram);
-var
-  Modes: Integer;
-  ModeIndex: Integer;
-  OpCode: Integer;
-
+procedure TIntCodeProcessor.Run(AProgram: TIntCodeProgram);
   function ReadValue: Integer;
   begin
     // Read a value and increment the position
@@ -84,8 +86,8 @@ var
     // as an address for reading from.
     Result := ReadValue;
 
-    Mode := (Modes div Trunc(IntPower(10, ModeIndex))) mod 10;
-    Inc(ModeIndex);
+    Mode := (AProgram.Modes div Trunc(IntPower(10, AProgram.ModeIndex))) mod 10;
+    Inc(AProgram.ModeIndex);
 
     if Mode = MODE_POSITION then
       Result := AProgram.Code[Result]
@@ -103,19 +105,22 @@ var
   end;
 
 begin
+  if AProgram.State = psSuspended then
+    Write(FIO.Read, ReadValue);
   AProgram.State := psRunning;
+
   repeat
-    OpCode := ReadValue;
-    Modes := OpCode div 100;
-    ModeIndex := 0;
-    OpCode := OpCode mod 100;
-    case OpCode of
+    AProgram.OpCode := ReadValue;
+    AProgram.Modes := AProgram.OpCode div 100;
+    AProgram.ModeIndex := 0;
+    AProgram.OpCode := AProgram.OpCode mod 100;
+    case AProgram.OpCode of
       1: // Add
         Write(ReadParam+ReadParam, ReadValue);
       2: // Multiply
         Write(ReadParam*ReadParam, ReadValue);
-      3: // Store input
-        Write(FIO.Read, ReadValue);
+      3: // Wait for input
+        AProgram.State := psSuspended;
       4: // Read output
         FIO.Write(ReadParam);
       5: // Jump if true
@@ -129,7 +134,7 @@ begin
       99:
         AProgram.State := psHalted;
     else
-      raise EInvalidOpCode.CreateFmt('Unknown opcode %d at address %d', [OpCode, AProgram.Position-1]);
+      raise EInvalidOpCode.CreateFmt('Unknown opcode %d at address %d', [AProgram.OpCode, AProgram.Position-1]);
     end;
 
   until AProgram.State in [psSuspended, psHalted];
@@ -137,11 +142,11 @@ end;
 
 { TProgram }
 
-constructor TProgram.Create(ACode: TIntegerArray);
+constructor TIntCodeProgram.Create(ACode: TIntegerArray);
 begin
   Code := ACode;
   Position := 0;
-  State := psSuspended;
+  State := psUnstarted;
 end;
 
 end.
