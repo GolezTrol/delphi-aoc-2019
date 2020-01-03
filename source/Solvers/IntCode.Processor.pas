@@ -9,6 +9,17 @@ uses
   IntCode.Types;
 
 type
+  TProgramState = (psSuspended, psRunning, psHalted);
+
+  TProgram = class
+  private
+    Code: TIntegerArray;
+    Position: Integer;
+    State: TProgramState;
+  public
+    constructor Create(ACode: TIntegerArray);
+  end;
+
   TIntCodeProcessor = class(TInterfacedObject)
   private
     FIO: IIO;
@@ -16,6 +27,7 @@ type
     constructor Create(AInput: IIO);
     procedure Execute(var Code: TIntegerArray);
     function ExecuteScalar(const Code: TIntegerArray): Integer;
+    procedure Run(AProgram: TProgram);
   end;
 
 implementation
@@ -27,7 +39,29 @@ end;
 
 procedure TIntCodeProcessor.Execute(var Code: TIntegerArray);
 var
-  Position: Integer;
+  p: TProgram;
+begin
+  p := TProgram.Create(Code);
+  try
+    repeat
+      Run(p);
+    until p.State = psHalted;
+  finally
+    p.Free;
+  end;
+end;
+
+function TIntCodeProcessor.ExecuteScalar(const Code: TIntegerArray): Integer;
+var
+  CodeCopy: TIntegerArray;
+begin
+  CodeCopy := Copy(Code, 0, Length(Code));
+  Execute(CodeCopy);
+  Result := CodeCopy[0];
+end;
+
+procedure TIntCodeProcessor.Run(AProgram: TProgram);
+var
   Modes: Integer;
   ModeIndex: Integer;
   OpCode: Integer;
@@ -35,8 +69,8 @@ var
   function ReadValue: Integer;
   begin
     // Read a value and increment the position
-    Result := Code[Position];
-    Inc(Position);
+    Result := AProgram.Code[AProgram.Position];
+    Inc(AProgram.Position);
   end;
 
   function ReadParam: Integer;
@@ -54,22 +88,22 @@ var
     Inc(ModeIndex);
 
     if Mode = MODE_POSITION then
-      Result := Code[Result]
+      Result := AProgram.Code[Result]
   end;
 
   procedure Write(const Value, Addr: Integer);
   begin
-    Code[Addr] := Value;
+    AProgram.Code[Addr] := Value;
   end;
 
   procedure Jump(const Condition: Boolean; const Addr: Integer);
   begin
     if Condition then
-      Position := Addr;
+      AProgram.Position := Addr;
   end;
 
 begin
-  Position := 0;
+  AProgram.State := psRunning;
   repeat
     OpCode := ReadValue;
     Modes := OpCode div 100;
@@ -93,22 +127,21 @@ begin
       8: // Equal
         Write(Ord(ReadParam = ReadParam), ReadValue);
       99:
-        Break;
+        AProgram.State := psHalted;
     else
-      raise EInvalidOpCode.CreateFmt('Unknown opcode %d at address %d', [OpCode, Position-1]);
+      raise EInvalidOpCode.CreateFmt('Unknown opcode %d at address %d', [OpCode, AProgram.Position-1]);
     end;
 
-  until False;
-
+  until AProgram.State in [psSuspended, psHalted];
 end;
 
-function TIntCodeProcessor.ExecuteScalar(const Code: TIntegerArray): Integer;
-var
-  CodeCopy: TIntegerArray;
+{ TProgram }
+
+constructor TProgram.Create(ACode: TIntegerArray);
 begin
-  CodeCopy := Copy(Code, 0, Length(Code));
-  Execute(CodeCopy);
-  Result := CodeCopy[0];
+  Code := ACode;
+  Position := 0;
+  State := psSuspended;
 end;
 
 end.
