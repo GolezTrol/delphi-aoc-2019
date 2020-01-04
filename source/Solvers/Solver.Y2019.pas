@@ -3,6 +3,7 @@ unit Solver.Y2019;
 interface
 
 uses
+  AoC.Types,
   IntCode.Types,
   Solver.Intf;
 
@@ -57,8 +58,8 @@ type
   private
     FInputOutput: Integer;
   private // IIO
-    function Read: Integer;
-    procedure Write(Value: Integer);
+    function Read: TAoCInt;
+    procedure Write(Value: TAoCInt);
   private
     function Solve(Input: String): String;
   end;
@@ -74,7 +75,6 @@ implementation
 
 uses
   SysUtils,
-  AoC.Types,
   InputUtils,
   Module.Fuel,
   Wiring,
@@ -372,7 +372,7 @@ end;
 
 { TSolver2019_7_2 }
 
-function TSolver2019_7_2.Read: Integer;
+function TSolver2019_7_2.Read: TAoCInt;
 begin
   Result := FInputOutput;
 end;
@@ -438,7 +438,7 @@ begin
   Result := HighestOutput.ToString;
 end;
 
-procedure TSolver2019_7_2.Write(Value: Integer);
+procedure TSolver2019_7_2.Write(Value: TAoCInt);
 begin
   FInputOutput := Value;
 end;

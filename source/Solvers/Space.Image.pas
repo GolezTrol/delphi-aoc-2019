@@ -76,8 +76,8 @@ begin
       Inc(Index);
     end;
     case Pixel of
-      0: Result[Index] := '?';
-      1: Result[Index] := '?';
+      0: Result[Index] := '.';
+      1: Result[Index] := '#';
       2: Result[Index] := ' ';
     end;
     Inc(Index);

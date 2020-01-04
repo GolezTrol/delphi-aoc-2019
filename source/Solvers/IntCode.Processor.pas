@@ -16,6 +16,7 @@ type
     // Global program state
     Code: TIntegerArray; // The program code/memory
     Position: Integer; // Instruction pointer
+    RelativeBase: Integer; // Relative base (offset) of position)
     State: TProgramState; // Running state
     // Current instruction.
     OpCode: Integer; // The opcode
@@ -33,7 +34,7 @@ type
   public
     constructor Create(AInput: IIO);
     procedure Execute(var Code: TIntegerArray);
-    function ExecuteScalar(const Code: TIntegerArray): Integer;
+    function ExecuteScalar(const Code: TIntegerArray): TAoCInt;
     procedure Run(AProgram: TIntCodeProgram);
   end;
 
@@ -58,7 +59,7 @@ begin
   end;
 end;
 
-function TIntCodeProcessor.ExecuteScalar(const Code: TIntegerArray): Integer;
+function TIntCodeProcessor.ExecuteScalar(const Code: TIntegerArray): TAocInt;
 var
   CodeCopy: TIntegerArray;
 begin
@@ -68,17 +69,26 @@ begin
 end;
 
 procedure TIntCodeProcessor.Run(AProgram: TIntCodeProgram);
-  function ReadValue: Integer;
+
+  function ReadAddress(Address: Integer): TAoCInt;
+  begin
+    if Address > High(AProgram.Code) then
+      Exit(0);
+    Result := AProgram.Code[Address];
+  end;
+
+  function ReadValue: TAoCInt;
   begin
     // Read a value and increment the position
-    Result := AProgram.Code[AProgram.Position];
+    Result := ReadAddress(AProgram.Position);
     Inc(AProgram.Position);
   end;
 
-  function ReadParam: Integer;
+  function ReadParam: TAoCInt;
   const
     MODE_POSITION = 0;
     MODE_IMMEDATE = 1;
+    MODE_RELATIVE = 2;
   var
     Mode: Integer;
   begin
@@ -90,11 +100,15 @@ procedure TIntCodeProcessor.Run(AProgram: TIntCodeProgram);
     Inc(AProgram.ModeIndex);
 
     if Mode = MODE_POSITION then
-      Result := AProgram.Code[Result]
+      Result := ReadAddress(Result)
+    else if Mode = MODE_RELATIVE then
+      Result := ReadAddress(Result + AProgram.RelativeBase);
   end;
 
-  procedure Write(const Value, Addr: Integer);
+  procedure Write(const Value: TAoCInt; const Addr: Integer);
   begin
+    if Addr > High(AProgram.Code) then
+      SetLength(AProgram.Code, Addr*2);
     AProgram.Code[Addr] := Value;
   end;
 
@@ -104,6 +118,8 @@ procedure TIntCodeProcessor.Run(AProgram: TIntCodeProgram);
       AProgram.Position := Addr;
   end;
 
+var
+  Condition: Boolean;
 begin
   if AProgram.State = psSuspended then
     Write(FIO.Read, ReadValue);
@@ -124,13 +140,27 @@ begin
       4: // Read output
         FIO.Write(ReadParam);
       5: // Jump if true
-        Jump(ReadParam <> 0, ReadParam);
+      begin
+        Condition := ReadParam <> 0;
+        Jump(Condition, ReadParam);
+      end;
       6: // Jump if false
-        Jump(ReadParam = 0, ReadParam);
+      begin
+        Condition := ReadParam = 0;
+        Jump(Condition, ReadParam);
+      end;
       7: // Less than
-        Write(Ord(ReadParam < ReadParam), ReadValue);
+      begin
+        Condition := ReadParam < ReadParam;
+        Write(Ord(Condition), ReadValue);
+      end;
       8: // Equal
-        Write(Ord(ReadParam = ReadParam), ReadValue);
+      begin
+        Condition := ReadParam = ReadParam;
+        Write(Ord(Condition), ReadValue);
+      end;
+      9:
+        AProgram.RelativeBase := AProgram.RelativeBase + ReadParam;
       99:
         AProgram.State := psHalted;
     else
@@ -146,6 +176,7 @@ constructor TIntCodeProgram.Create(ACode: TIntegerArray);
 begin
   Code := ACode;
   Position := 0;
+  RelativeBase := 0;
   State := psUnstarted;
 end;
 

@@ -18,7 +18,7 @@ class function TPermutation.GetPermutations(ASet: TIntegerArray): TIntegerArrayA
 var
   Index: Integer;
 
-  procedure Swap(var A, B: Integer); inline;
+  procedure Swap(var A, B: TAoCInt); inline;
   var
     C: Integer;
   begin

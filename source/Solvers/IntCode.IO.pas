@@ -9,7 +9,7 @@ uses
 type
   IIntCodeArrayIO = interface(IIO)
     function GetOutputs: TIntegerArray;
-    function GetLastOutput: Integer;
+    function GetLastOutput: TAoCInt;
   end;
 
   TIntCodeArrayIO = class(TInterfacedObject, IIO, IIntCodeArrayIO)
@@ -18,11 +18,11 @@ type
     FInputPointer: Integer;
     FOutputs: TIntegerArray;
   private  // IIO
-    function Read: Integer;
-    procedure Write(Value: Integer);
+    function Read: TAoCInt;
+    procedure Write(Value: TAoCInt);
   private // IIntCodeArrayIO
     function GetOutputs: TIntegerArray;
-    function GetLastOutput: Integer;
+    function GetLastOutput: TAoCInt;
   public
     constructor Create(Inputs: TIntegerArray);
   end;
@@ -37,7 +37,7 @@ begin
   inherited Create;
 end;
 
-function TIntCodeArrayIO.GetLastOutput: Integer;
+function TIntCodeArrayIO.GetLastOutput: TAocInt;
 begin
   Result := 0;
   if Length(FOutputs) > 0 then
@@ -49,7 +49,7 @@ begin
   Result := FOutputs;
 end;
 
-function TIntCodeArrayIO.Read: Integer;
+function TIntCodeArrayIO.Read: TAoCInt;
 begin
   if FInputPointer >= Length(FInputs) then
     raise EIntCodeIO.Create('EOF on inputs');
@@ -57,7 +57,7 @@ begin
   Inc(FInputPointer);
 end;
 
-procedure TIntCodeArrayIO.Write(Value: Integer);
+procedure TIntCodeArrayIO.Write(Value: TAoCInt);
 begin
   // Easy but inefficient re-allocation on every write. To be improved once we
   // get programs with a lot of output.

@@ -26,7 +26,7 @@ type
     [TestCase('', '122216789012,189016,3,2')]
     procedure TestFlatten(AData, ALayer: String; AWidth, AHeight: Integer);
 
-    [TestCase('', '122210011012,'#13#10'░░░'#13#10'█░█,3,2')]
+    [TestCase('', '122210011012,'#13#10'###'#13#10'.#.,3,2')]
     procedure TestDraw(AData, AImage: String; AWidth, AHeight: Integer);
   end;
 

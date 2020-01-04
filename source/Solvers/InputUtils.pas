@@ -57,7 +57,7 @@ begin
     sl.DelimitedText := Input;
     SetLength(Result, sl.Count);
     for i := 0 to sl.Count - 1 do
-      Result[i] := sl[i].ToInteger;
+      Result[i] := sl[i].ToInt64;
   finally
     sl.Free;
   end;
@@ -82,7 +82,7 @@ begin
     sl.Text := Input;
     SetLength(Result, sl.Count);
     for i := 0 to sl.Count - 1 do
-      Result[i] := sl[i].ToInteger;
+      Result[i] := sl[i].ToInt64;
   finally
     sl.Free;
   end;
@@ -102,8 +102,8 @@ var
   p: Integer;
 begin
   p := Pos('-', Input);
-  A := Copy(Input, 1, p-1).ToInteger;
-  B := Copy(Input, p+1, Length(Input)).ToInteger;
+  A := Copy(Input, 1, p-1).ToInt64;
+  B := Copy(Input, p+1, Length(Input)).ToInt64;
 end;
 
 class function TInput.StringCommaSeparated(Input: String): TStringArray;
@@ -155,7 +155,7 @@ begin
   Result[0] := Location;
   for Direction in Directions do
   begin
-    Delta := Copy(Direction, 2, Length(Direction)).ToInteger();
+    Delta := Copy(Direction, 2, Length(Direction)).ToInt64();
     case Direction[1] of
       'R': Inc(Location.X, Delta);
       'L': Dec(Location.X, Delta);

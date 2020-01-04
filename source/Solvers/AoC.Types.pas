@@ -6,7 +6,8 @@ uses
   Math, Spring.Collections;
 
 type
-  TIntegerArray = TArray<Integer>;
+  TAoCInt = Int64;
+  TIntegerArray = TArray<TAoCInt>;
   TIntegerArrayArray = TArray<TIntegerArray>; // For permutations
   TStringArray = TArray<String>;
 

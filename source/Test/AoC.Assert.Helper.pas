@@ -25,7 +25,7 @@ begin
   Assert.AreEqual(Length(Expected), Length(Actual), Description + ', length');
   if Length(Expected) = Length(Actual) then
     for i := Low(Actual) to High(Actual) do
-      Assert.AreEqual(Integer(Expected[i]), Actual[i], Description + ', item ' + i.ToString);
+      Assert.AreEqual(TAoCInt(Expected[i]), Actual[i], Description + ', item ' + i.ToString);
 end;
 
 end.
