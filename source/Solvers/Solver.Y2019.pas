@@ -53,7 +53,13 @@ type
   TSolver2019_7_1 = class(TInterfacedObject, ISolver)
     function Solve(Input: String): String;
   end;
-  TSolver2019_7_2 = class(TInterfacedObject, ISolver)
+  TSolver2019_7_2 = class(TInterfacedObject, ISolver, IIO)
+  private
+    FInputOutput: Integer;
+  private // IIO
+    function Read: Integer;
+    procedure Write(Value: Integer);
+  private
     function Solve(Input: String): String;
   end;
 
@@ -358,9 +364,75 @@ end;
 
 { TSolver2019_7_2 }
 
-function TSolver2019_7_2.Solve(Input: String): String;
+function TSolver2019_7_2.Read: Integer;
 begin
+  Result := FInputOutput;
+end;
 
+function TSolver2019_7_2.Solve(Input: String): String;
+const
+  PhaseSettings: TIntegerArray = [5,6,7,8,9];
+var
+  Permutations: TIntegerArrayArray;
+  Permutation: TIntegerArray;
+  Code: TIntegerArray;
+  HighestOutput: Integer;
+  Processor: TIntCodeProcessor;
+  Amps: Array[0..4] of TIntCodeProgram;
+  a: Integer;
+begin
+  HighestOutput := 0;
+
+  Processor := TIntCodeProcessor.Create(Self);
+  try
+    Code := TInput.IntCommaSeparated(Input);
+
+    // Try all permutations of the phase settings set.
+    Permutations := TPermutation.GetPermutations(PhaseSettings);
+
+    for Permutation in Permutations do
+    begin
+      // For each permutation, initialize the programs again, let them read
+      // their phase settings, and then let them run until they want their actual input
+      for a := Low(Amps) to High(Amps) do
+      begin
+        Amps[a] := TIntCodeProgram.Create(Copy(Code, 0, Length(Code)));
+        FInputOutput := Permutation[a];
+        Processor.Run(Amps[a]); // Run until they want their phase setting
+        Processor.Run(Amps[a]); // Run until they want their first input.
+      end;
+
+      // Set the input to 0 for the very first input of the very first amp.
+      FInputOutput := 0;
+
+      // After that, run the programs one by one. Each run should take an input
+      // and provide an output using the same FInputOutput variable.
+      // Keep running the programs until they are halted.
+      repeat
+        for a := Low(Amps) to High(Amps) do
+          Processor.Run(Amps[a]);
+      until Amps[4].ProgramState = psHalted;
+
+      // The last output of the last amp is the outcome for this permutation.
+      // Save the highest output. That leads to the most successful permutation,
+      // that highest output is the puzzle answer.
+      if FInputOutput > HighestOutput then
+        HighestOutput := FInputOutput;
+
+      // Free them all
+      for a := Low(Amps) to High(Amps) do
+        Amps[a].Free;
+    end;
+  finally
+    Processor.Free;
+  end;
+
+  Result := HighestOutput.ToString;
+end;
+
+procedure TSolver2019_7_2.Write(Value: Integer);
+begin
+  FInputOutput := Value;
 end;
 
 end.

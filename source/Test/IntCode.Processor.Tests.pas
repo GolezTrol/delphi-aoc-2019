@@ -108,7 +108,6 @@ end;
 procedure TIntCodeProcessorTests.TestExecute(const Input, Expected: String);
 var
   Code, ExpectedCode: TIntegerArray;
-  i: Integer;
 begin
   Code := TInput.IntCommaSeparated(Input);
   ExpectedCode := TInput.IntCommaSeparated(Expected);
@@ -141,8 +140,6 @@ procedure TIntCodeProcessorTests.TestSuspension(const Input, First,
   Final: String);
 var
   Prog: TIntCodeProgram;
-  Code: TIntegerArray;
-  Outputs: TIntegerArray;
 begin
   Prog := TIntCodeProgram.Create(TInput.IntCommaSeparated(Input));
 
