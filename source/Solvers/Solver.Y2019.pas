@@ -70,6 +70,13 @@ type
   TSolver2019_8_2 = class(TInterfacedObject, ISolver)
     function Solve(Input: String): String;
   end;
+  // Day 9: Sensor Boost
+  TSolver2019_9_1 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
+  TSolver2019_9_2 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
 
 implementation
 
@@ -467,6 +474,38 @@ begin
   finally
     Free;
   end;
+end;
+
+{ TSolver2019_9_1 }
+
+function TSolver2019_9_1.Solve(Input: String): String;
+var
+  Code: TIntegerArray;
+  IO: IIntCodeArrayIO;
+  Output: TAoCInt;
+begin
+  IO := TIntCodeArrayIO.Create([
+    1 // Test mode
+  ]);
+
+  with TIntCodeProcessor.Create(IO) do
+  try
+    Code := TInput.IntCommaSeparated(Input);
+    Execute(Code);
+    for Output in IO.GetOutputs do
+      Result := Result + #13#10 + Output.ToString;
+
+    Result := Result + #13#10 + Length(IO.GetOutputs).ToString + 'outputs. Last: ' + IO.GetLastOutput.ToString;
+  finally
+    Free;
+  end;
+end;
+
+{ TSolver2019_9_2 }
+
+function TSolver2019_9_2.Solve(Input: String): String;
+begin
+
 end;
 
 end.

@@ -33,6 +33,7 @@ type
     [TestCase('Mul Position 2', '2,4,4,5,99,0|2,4,4,5,99,9801', '|')] // (99 * 99 = 9801).
     [TestCase('Mul Immediate 1', '1102,3,4,3,99|1102,3,4,12,99', '|')] // (3 * 4 = 12).
     [TestCase('Input Position', '3,0,99|12345,0,99', '|')]
+    [TestCase('Input Relative', '109,2,203,0,99|109,2,12345,0,99', '|')]
     // Because @2 = 0, continue with the multiplication and store its result (8) in pos 2.
     [TestCase('Jump-if-true Position', '5,2,0,1102,2,4,2,99|5,2,8,1102,2,4,2,99', '|')]
     // Because @2 = 0, continue with the multiplication and store its result (14) in pos 2.

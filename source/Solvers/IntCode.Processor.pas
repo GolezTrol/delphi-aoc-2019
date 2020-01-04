@@ -69,6 +69,10 @@ begin
 end;
 
 procedure TIntCodeProcessor.Run(AProgram: TIntCodeProgram);
+const
+  MODE_POSITION = 0;
+  MODE_IMMEDATE = 1;
+  MODE_RELATIVE = 2;
 
   function ReadAddress(Address: Integer): TAoCInt;
   begin
@@ -84,32 +88,38 @@ procedure TIntCodeProcessor.Run(AProgram: TIntCodeProgram);
     Inc(AProgram.Position);
   end;
 
+  function GetMode: Integer;
+  begin
+    Result := (AProgram.Modes div Trunc(IntPower(10, AProgram.ModeIndex))) mod 10;
+    Inc(AProgram.ModeIndex);
+  end;
+
   function ReadParam: TAoCInt;
-  const
-    MODE_POSITION = 0;
-    MODE_IMMEDATE = 1;
-    MODE_RELATIVE = 2;
-  var
-    Mode: Integer;
   begin
     // Read a value, and depending on the mode, use it immediately, or use it
     // as an address for reading from.
     Result := ReadValue;
 
-    Mode := (AProgram.Modes div Trunc(IntPower(10, AProgram.ModeIndex))) mod 10;
-    Inc(AProgram.ModeIndex);
-
-    if Mode = MODE_POSITION then
-      Result := ReadAddress(Result)
-    else if Mode = MODE_RELATIVE then
-      Result := ReadAddress(Result + AProgram.RelativeBase);
+    case GetMode of
+      MODE_POSITION:
+        Result := ReadAddress(Result);
+      MODE_RELATIVE:
+        Result := ReadAddress(Result + AProgram.RelativeBase);
+    end;
   end;
 
   procedure Write(const Value: TAoCInt; const Addr: Integer);
+  var
+    AbsAddr: Integer;
   begin
-    if Addr > High(AProgram.Code) then
-      SetLength(AProgram.Code, Addr*2);
-    AProgram.Code[Addr] := Value;
+    AbsAddr := Addr;
+    case GetMode of
+      MODE_RELATIVE:
+        AbsAddr := AbsAddr + AProgram.RelativeBase;
+    end;
+    if AbsAddr > High(AProgram.Code) then
+      SetLength(AProgram.Code, AbsAddr+1000);
+    AProgram.Code[AbsAddr] := Value;
   end;
 
   procedure Jump(const Condition: Boolean; const Addr: Integer);
