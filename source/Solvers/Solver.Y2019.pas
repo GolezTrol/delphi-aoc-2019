@@ -504,8 +504,22 @@ end;
 { TSolver2019_9_2 }
 
 function TSolver2019_9_2.Solve(Input: String): String;
+var
+  Code: TIntegerArray;
+  IO: IIntCodeArrayIO;
 begin
+  IO := TIntCodeArrayIO.Create([
+    2 // Sensor boost mode
+  ]);
 
+  with TIntCodeProcessor.Create(IO) do
+  try
+    Code := TInput.IntCommaSeparated(Input);
+    Execute(Code);
+    Result := Length(IO.GetOutputs).ToString + 'outputs. Last: ' + IO.GetLastOutput.ToString;
+  finally
+    Free;
+  end;
 end;
 
 end.
