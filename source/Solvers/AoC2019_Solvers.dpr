@@ -18,7 +18,8 @@ uses
   IntCode.Types in 'IntCode.Types.pas',
   IntCode.IO in 'IntCode.IO.pas',
   Orbit.Map in 'Orbit.Map.pas',
-  Permutation in 'Permutation.pas';
+  Permutation in 'Permutation.pas',
+  Space.Image in 'Space.Image.pas';
 
 {$R *.res}
 

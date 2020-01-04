@@ -90,6 +90,8 @@
         <DCCReference Include="Password.Tests.pas"/>
         <DCCReference Include="Orbit.Map.Tests.pas"/>
         <DCCReference Include="Permutation.Tests.pas"/>
+        <DCCReference Include="Space.Image.Tests.pas"/>
+        <DCCReference Include="AoC.Assert.Helper.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -24,7 +24,9 @@ uses
   Wiring.Tests in 'Wiring.Tests.pas',
   Password.Tests in 'Password.Tests.pas',
   Orbit.Map.Tests in 'Orbit.Map.Tests.pas',
-  Permutation.Tests in 'Permutation.Tests.pas';
+  Permutation.Tests in 'Permutation.Tests.pas',
+  Space.Image.Tests in 'Space.Image.Tests.pas',
+  AoC.Assert.Helper in 'AoC.Assert.Helper.pas';
 
 {$R *.RES}
 

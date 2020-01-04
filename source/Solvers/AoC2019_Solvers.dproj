@@ -101,6 +101,7 @@
         <DCCReference Include="IntCode.IO.pas"/>
         <DCCReference Include="Orbit.Map.pas"/>
         <DCCReference Include="Permutation.pas"/>
+        <DCCReference Include="Space.Image.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

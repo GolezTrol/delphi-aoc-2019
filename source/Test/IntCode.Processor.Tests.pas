@@ -5,6 +5,7 @@ interface
 uses
   SysUtils,
   DUnitX.TestFramework,
+  AoC.Assert.Helper,
   IntCode.Types,
   IntCode.IO,
   IntCode.Processor,
@@ -17,8 +18,6 @@ type
   private
     FProcessor: TIntCodeProcessor;
     FIO: IIntCodeArrayIO;
-  private
-    procedure AssertEqualCode(Expected, Actual: TIntegerArray; Description: String = '');
   public
     [Setup]
     procedure Setup;
@@ -83,17 +82,6 @@ type
 
 implementation
 
-procedure TIntCodeProcessorTests.AssertEqualCode(Expected,
-  Actual: TIntegerArray; Description: String = '');
-var
-  i: Integer;
-begin
-  Assert.AreEqual(Length(Expected), Length(Actual), Description + ', length of codes');
-  if Length(Expected) = Length(Actual) then
-    for i := Low(Actual) to High(Actual) do
-      Assert.AreEqual(Integer(Expected[i]), Actual[i], Description + ', item ' + i.ToString);
-end;
-
 procedure TIntCodeProcessorTests.Setup;
 begin
   FIO := TIntCodeArrayIO.Create([12345]);
@@ -112,7 +100,7 @@ begin
   Code := TInput.IntCommaSeparated(Input);
   ExpectedCode := TInput.IntCommaSeparated(Expected);
   FProcessor.Execute(Code);
-  AssertEqualCode(ExpectedCode, Code);
+  Assert.AreEqualIntArrays(ExpectedCode, Code);
 end;
 
 procedure TIntCodeProcessorTests.TestExecuteScalar(const Input,
@@ -145,11 +133,11 @@ begin
 
   FProcessor.Run(Prog);
   Assert.AreEqual(Prog.ProgramState, psSuspended);
-  AssertEqualCode(TInput.IntCommaSeparated(First), Prog.MemDump, 'First');
+  Assert.AreEqualIntArrays(TInput.IntCommaSeparated(First), Prog.MemDump, 'First');
   repeat
     FProcessor.Run(Prog);
   until Prog.ProgramState = psHalted;
-  AssertEqualCode(TInput.IntCommaSeparated(Final), Prog.MemDump, 'Final');
+  Assert.AreEqualIntArrays(TInput.IntCommaSeparated(Final), Prog.MemDump, 'Final');
 end;
 
 initialization

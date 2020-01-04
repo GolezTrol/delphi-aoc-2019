@@ -10,6 +10,7 @@ type
   TInput = class
     class function IntPerLine(Input: String): TIntegerArray;
     class function IntCommaSeparated(Input: String): TIntegerArray;
+    class function IntDigits(Input: String): TIntegerArray;
     class function StringPerLine(Input: String): TStringArray;
     class function StringCommaSeparated(Input: String): TStringArray;
     class function Wire(Input: String): TWire;
@@ -60,6 +61,15 @@ begin
   finally
     sl.Free;
   end;
+end;
+
+class function TInput.IntDigits(Input: String): TIntegerArray;
+var
+  i: Integer;
+begin
+  SetLength(Result, Length(Input));
+  for i := Low(Result) to High(Result) do
+    Result[i] := Ord(Input[i+1]) - Ord('0');
 end;
 
 class function TInput.IntPerLine(Input: String): TIntegerArray;

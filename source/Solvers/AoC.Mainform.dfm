@@ -17,8 +17,14 @@ object FrmAoC: TFrmAoC
   object mmoSolutions: TMemo
     Left = 8
     Top = 66
-    Width = 201
+    Width = 617
     Height = 327
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Courier New'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 0
   end
   object btnGoGoGo: TButton

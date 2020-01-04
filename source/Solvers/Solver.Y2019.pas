@@ -62,6 +62,13 @@ type
   private
     function Solve(Input: String): String;
   end;
+  // Day 8: Space Image Format
+  TSolver2019_8_1 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
+  TSolver2019_8_2 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
 
 implementation
 
@@ -75,7 +82,8 @@ uses
   IntCode.Processor,
   IntCode.IO,
   Orbit.Map,
-  Permutation;
+  Permutation,
+  Space.Image;
 
 { TSolver2019_1_1 }
 
@@ -433,6 +441,32 @@ end;
 procedure TSolver2019_7_2.Write(Value: Integer);
 begin
   FInputOutput := Value;
+end;
+
+{ TSolver2019_8_1 }
+
+function TSolver2019_8_1.Solve(Input: String): String;
+begin
+  with TSpaceImage.Create do
+  try
+    LoadFrom(TInput.IntDigits(Input), 25, 6);
+    Result := CheckProduct(0, [1, 2]).ToString;
+  finally
+    Free;
+  end;
+end;
+
+{ TSolver2019_8_2 }
+
+function TSolver2019_8_2.Solve(Input: String): String;
+begin
+  with TSpaceImage.Create do
+  try
+    LoadFrom(TInput.IntDigits(Input), 25, 6);
+    Result := Draw;
+  finally
+    Free;
+  end;
 end;
 
 end.
