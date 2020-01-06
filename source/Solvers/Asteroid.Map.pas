@@ -7,12 +7,29 @@ uses
   Spring.Collections;
 
 type
+  TAsteroid = class;
+
+  TCanSee = record
+    Me, Other: TAsteroid;
+    DeltaBlockerX, DeltaBlockerY, NormalFactor: Integer;
+    i: Integer;
+    DeltaOtherX: Integer;
+    DeltaOtherY: Integer;
+    NormalX: Double;
+    NormalY: Double;
+    SignX: Integer;
+    SignY: Integer;
+    constructor Create(AMe, AOther: TAsteroid);
+    function Past(Blocker: TAsteroid): Boolean;
+  end;
+
   TAsteroid = class
     X, Y: Integer;
     Number: Integer;
     function DistanceTo(Other: TAsteroid): Integer;
     // True if Self can see Other. False if line of sight is blocked by Blocker.
-    function CanSee(Blocker, Other: TAsteroid): Boolean;
+    function CanSee(Blocker, Other: TAsteroid): Boolean; overload;
+    function CanSee(Other: TAsteroid): TCanSee; overload;
     constructor Create(const AX, AY: Integer);
   end;
 
@@ -41,45 +58,13 @@ uses
 { TAsteroid }
 
 function TAsteroid.CanSee(Blocker, Other: TAsteroid): Boolean;
-var
-  DeltaBlockerX, DeltaBlockerY, NormalFactor: Integer;
-  i: Integer;
-  DeltaOtherX: Integer;
-  DeltaOtherY: Integer;
-  NormalX: Double;
-  NormalY: Double;
 begin
-  // Not all different, say true. There is no third one to block.
-  if (Self = Blocker) or (Self = Other) or (Blocker = Other) then
-    Exit(True);
+  Result := TCanSee.Create(Self, Other).Past(Blocker);
+end;
 
-  // Not in the same quadrant? No need to look further, they are visible.
-  if (Sign(Blocker.X - X) <> Sign(Other.X - X)) or (Sign(Blocker.Y - Y) <> Sign(Other.Y - Y)) then
-    Exit(True);
-
-  DeltaBlockerX := Abs(Blocker.X - X);
-  DeltaBlockerY := Abs(Blocker.Y - Y);
-  DeltaOtherX := Abs(Other.X - X);
-  DeltaOtherY := Abs(Other.Y - Y);
-
-  // Further away? Can't be blocking. Visible is true.
-  if (DeltaBlockerX > DeltaOtherX) or (DeltaBlockerY > DeltaOtherY) then
-    Exit(True);
-
-  NormalFactor := 1;
-  for i := Max(DeltaBlockerX, DeltaBlockerY) downto 1 do
-  begin
-    if (DeltaBlockerX mod i = 0) and (DeltaBlockerY mod i = 0) then
-    begin
-      NormalFactor := i;
-      Break;
-    end;
-  end;
-
-  NormalX := DeltaBlockerX div NormalFactor;
-  NormalY := DeltaBlockerY div NormalFactor;
-
-  Result := ((DeltaOtherX * NormalY) <> (DeltaOtherY * NormalX));
+function TAsteroid.CanSee(Other: TAsteroid): TCanSee;
+begin
+  Result := TCanSee.Create(Self, Other);
 end;
 
 constructor TAsteroid.Create(const AX, AY: Integer);
@@ -205,22 +190,72 @@ begin
         Continue;
 
       IsBlocked := False;
-      for Blocker in FAsteroids do
-      begin
-        if (Candidate = Blocker) or (Blocker = Other) then
-          Continue;
 
-        if not Candidate.CanSee(Blocker, Other) then
+      with Candidate.CanSee(Other) do
+      begin
+        for Blocker in FAsteroids do
         begin
-          IsBlocked := True;
-          Break;
+          if (Candidate = Blocker) or (Blocker = Other) then
+            Continue;
+
+          if not Past(Blocker) then
+          begin
+            IsBlocked := True;
+            Break;
+          end;
         end;
       end;
+
       if not IsBlocked then
         Inc(Candidate.Number);
     end;
 
   Result := Candidates;
+end;
+
+{ TCanSee }
+
+constructor TCanSee.Create(AMe, AOther: TAsteroid);
+var
+  i: Integer;
+begin
+  Me := AMe;
+  Other := AOther;
+
+  DeltaOtherX := Abs(Other.X - Me.X);
+  DeltaOtherY := Abs(Other.Y - Me.Y);
+
+  for i := Max(DeltaOtherX, DeltaOtherY) downto 1 do
+  begin
+    if (DeltaOtherX mod i = 0) and (DeltaOtherY mod i = 0) then
+    begin
+      NormalFactor := i;
+      Break;
+    end;
+  end;
+
+  NormalX := DeltaOtherX div NormalFactor;
+  NormalY := DeltaOtherY div NormalFactor;
+end;
+
+function TCanSee.Past(Blocker: TAsteroid): Boolean;
+begin
+  // Not all different, say true. There is no third one to block.
+  if (Me = Blocker) or (Me = Other) or (Blocker = Other) then
+    Exit(True);
+
+  // Not in the same quadrant? No need to look further, they are visible.
+  if ((Blocker.X < Me.X) xor (Other.X < Me.X)) or ((Blocker.Y < Me.Y) xor (Other.Y < Me.Y)) then
+    Exit(True);
+
+  DeltaBlockerX := Abs(Blocker.X - Me.X);
+  DeltaBlockerY := Abs(Blocker.Y - Me.Y);
+
+  // Further away? Can't be blocking. Visible is true.
+  if (DeltaBlockerX > DeltaOtherX) or (DeltaBlockerY > DeltaOtherY) then
+    Exit(True);
+
+  Result := ((DeltaBlockerX * NormalY) <> (DeltaBlockerY * NormalX));
 end;
 
 end.
