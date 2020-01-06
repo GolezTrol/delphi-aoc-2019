@@ -3,7 +3,7 @@ object FrmAoC: TFrmAoC
   Top = 0
   ActiveControl = btnGoGoGo
   Caption = 'Advent Of Code 2019'
-  ClientHeight = 417
+  ClientHeight = 495
   ClientWidth = 657
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -12,13 +12,17 @@ object FrmAoC: TFrmAoC
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  DesignSize = (
+    657
+    495)
   PixelsPerInch = 96
   TextHeight = 13
   object mmoSolutions: TMemo
     Left = 8
     Top = 66
-    Width = 617
-    Height = 327
+    Width = 641
+    Height = 421
+    Anchors = [akLeft, akTop, akRight, akBottom]
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
