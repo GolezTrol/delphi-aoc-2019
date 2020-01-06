@@ -77,6 +77,13 @@ type
   TSolver2019_9_2 = class(TInterfacedObject, ISolver)
     function Solve(Input: String): String;
   end;
+  // Day 10: Monitoring Station
+  TSolver2019_10_1 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
+  TSolver2019_10_2 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
 
 implementation
 
@@ -90,7 +97,8 @@ uses
   IntCode.IO,
   Orbit.Map,
   Permutation,
-  Space.Image;
+  Space.Image,
+  Asteroid.Map;
 
 { TSolver2019_1_1 }
 
@@ -520,6 +528,25 @@ begin
   finally
     Free;
   end;
+end;
+
+{ TSolver2019_10_1 }
+
+function TSolver2019_10_1.Solve(Input: String): String;
+var
+  Map: TAsteroidMap;
+  X, Y, Number: Integer;
+begin
+  Map := TInput.CreateAsteroidMap(Input);
+  Map.GetBestOutlook(X, Y, Number);
+  Result := Format('(%d,%d):%d', [X, Y, Number]);
+end;
+
+{ TSolver2019_10_2 }
+
+function TSolver2019_10_2.Solve(Input: String): String;
+begin
+
 end;
 
 end.

@@ -19,7 +19,8 @@ uses
   IntCode.IO in 'IntCode.IO.pas',
   Orbit.Map in 'Orbit.Map.pas',
   Permutation in 'Permutation.pas',
-  Space.Image in 'Space.Image.pas';
+  Space.Image in 'Space.Image.pas',
+  Asteroid.Map in 'Asteroid.Map.pas';
 
 {$R *.res}
 

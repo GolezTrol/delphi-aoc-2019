@@ -102,6 +102,7 @@
         <DCCReference Include="Orbit.Map.pas"/>
         <DCCReference Include="Permutation.pas"/>
         <DCCReference Include="Space.Image.pas"/>
+        <DCCReference Include="Asteroid.Map.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

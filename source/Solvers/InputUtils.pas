@@ -4,7 +4,8 @@ interface
 
 uses
   AoC.Types,
-  Orbit.Map;
+  Orbit.Map,
+  Asteroid.Map;
 
 type
   TInput = class
@@ -17,12 +18,39 @@ type
     class procedure Range(Input: String; out A, B: Integer);
     class procedure Orbit(Input: String; out Parent, Body: String);
     class function CreateOrbitMap(Input: String): TOrbitMap;
+    class function CreateAsteroidMap(Input: String): TAsteroidMap;
   end;
 
 implementation
 
 uses
   Classes, SysUtils;
+
+class function TInput.CreateAsteroidMap(Input: String): TAsteroidMap;
+var
+  Line: String;
+  X, Y: Integer;
+  Loc: Char;
+begin
+  Result := TAsteroidMap.Create;
+  try
+    Y:= 0;
+    for Line in StringPerLine(Input) do
+    begin
+      X := 0;
+      for Loc in Line do
+      begin
+        if Loc = '#'  then
+          Result.Add(X, Y);
+        Inc(X);
+      end;
+      Inc(Y);
+    end;
+  except
+    Result.Free;
+    raise;
+  end;
+end;
 
 class function TInput.CreateOrbitMap(Input: String): TOrbitMap;
 var

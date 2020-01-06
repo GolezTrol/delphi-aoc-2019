@@ -36,6 +36,8 @@ begin
   Container.RegisterType<ISolver, TSolver2019_8_2>('2019.8.2');
   Container.RegisterType<ISolver, TSolver2019_9_1>('2019.9.1');
   Container.RegisterType<ISolver, TSolver2019_9_2>('2019.9.2');
+  Container.RegisterType<ISolver, TSolver2019_10_1>('2019.10.1');
+  Container.RegisterType<ISolver, TSolver2019_10_2>('2019.10.2');
 end;
 
 end.

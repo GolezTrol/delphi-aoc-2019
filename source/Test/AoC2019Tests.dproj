@@ -92,6 +92,7 @@
         <DCCReference Include="Permutation.Tests.pas"/>
         <DCCReference Include="Space.Image.Tests.pas"/>
         <DCCReference Include="AoC.Assert.Helper.pas"/>
+        <DCCReference Include="Asteroid.Map.Tests.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
