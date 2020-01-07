@@ -7,29 +7,12 @@ uses
   Spring.Collections;
 
 type
-  TAsteroid = class;
-
-  TCanSee = record
-    Me, Other: TAsteroid;
-    DeltaBlockerX, DeltaBlockerY, NormalFactor: Integer;
-    i: Integer;
-    DeltaOtherX: Integer;
-    DeltaOtherY: Integer;
-    NormalX: Double;
-    NormalY: Double;
-    SignX: Integer;
-    SignY: Integer;
-    constructor Create(AMe, AOther: TAsteroid);
-    function Past(Blocker: TAsteroid): Boolean;
-  end;
-
   TAsteroid = class
     X, Y: Integer;
     Number: Integer;
-    function DistanceTo(Other: TAsteroid): Integer;
-    // True if Self can see Other. False if line of sight is blocked by Blocker.
-    function CanSee(Blocker, Other: TAsteroid): Boolean; overload;
-    function CanSee(Other: TAsteroid): TCanSee; overload;
+    DX, DY: Integer;
+    DistanceSq: Integer;
+    Quadrant: Integer;
     constructor Create(const AX, AY: Integer);
   end;
 
@@ -53,30 +36,13 @@ type
 implementation
 
 uses
-  Classes, Math;
+  SysUtils, Classes, Math;
 
 { TAsteroid }
-
-function TAsteroid.CanSee(Blocker, Other: TAsteroid): Boolean;
-begin
-  Result := TCanSee.Create(Self, Other).Past(Blocker);
-end;
-
-function TAsteroid.CanSee(Other: TAsteroid): TCanSee;
-begin
-  Result := TCanSee.Create(Self, Other);
-end;
 
 constructor TAsteroid.Create(const AX, AY: Integer);
 begin
   X := AX; Y := AY;
-end;
-
-function TAsteroid.DistanceTo(Other: TAsteroid): Integer;
-begin
-  // Manhattan distance is good enough, it's mainly to sort asteroids
-  // that are in the same line of sight. If they are not, it doesn't matter.
-  Result := Abs(X - Other.X) + Abs(Y - Other.Y);
 end;
 
 { TAsteroidMap }
@@ -173,89 +139,75 @@ end;
 
 function TAsteroidMap.GetMonitorCandidates: IAsteroidList;
 var
-  Candidates: IAsteroidList;
-  Candidate, Blocker, Other: TAsteroid;
-  IsBlocked: Boolean;
+  Candidates, Others: IAsteroidList;
+  Candidate, Other: TAsteroid;
+  o1, o2: Integer;
+  Other1: TAsteroid;
+  Other2: TAsteroid;
 begin
   Candidates := TCollections.CreateList<TAsteroid>;
   Candidates.AddRange(FAsteroids);
 
+
   for Candidate in FAsteroids do
+  begin
+    Others := TCollections.CreateList<TAsteroid>;
+    Others.AddRange(FAsteroids);
+
     Candidate.Number := 0;
 
-  for Candidate in FAsteroids do
-    for Other in FAsteroids do
+    // Initialize each of the asteroids with a bit of data relative to Candidate.
+    for Other in Others do
     begin
-      if Candidate = Other then
-        Continue;
+      Other.DX := (Other.X - Candidate.X);
+      Other.DY := (Other.Y - Candidate.Y);
+      Other.DistanceSq := Abs(Other.DX*Other.DX+Other.DY*Other.DY);
 
-      IsBlocked := False;
+      Other.Quadrant := 0;
+      // 0   1
+      //   x
+      // 2   3
+      if Other.DX > 0 then
+        Other.Quadrant := Other.Quadrant + 1;
+      if Other.DY > 0 then
+        Other.Quadrant := Other.Quadrant + 2;
+    end;
 
-      with Candidate.CanSee(Other) do
+    // Sort the others by quadrant and distance relative to Candidate.
+    Others.Sort(
+      function(const A, B: TAsteroid): Integer
       begin
-        for Blocker in FAsteroids do
-        begin
-          if (Candidate = Blocker) or (Blocker = Other) then
-            Continue;
+        Result := A.Quadrant - B.Quadrant;
+        if Result = 0 then
+          Result := A.DistanceSq - B.DistanceSq;
+      end);
 
-          if not Past(Blocker) then
-          begin
-            IsBlocked := True;
-            Break;
-          end;
-        end;
-      end;
-
-      if not IsBlocked then
-        Inc(Candidate.Number);
-    end;
-
-  Result := Candidates;
-end;
-
-{ TCanSee }
-
-constructor TCanSee.Create(AMe, AOther: TAsteroid);
-var
-  i: Integer;
-begin
-  Me := AMe;
-  Other := AOther;
-
-  DeltaOtherX := Abs(Other.X - Me.X);
-  DeltaOtherY := Abs(Other.Y - Me.Y);
-
-  for i := Max(DeltaOtherX, DeltaOtherY) downto 1 do
-  begin
-    if (DeltaOtherX mod i = 0) and (DeltaOtherY mod i = 0) then
+    // Others[0] should be the candidate itself.
+    // Then for each of the others, starting with the closest,
+    if Others[0] <> Candidate then
+      raise Exception.Create('Candidate expected to be first in list');
+    o1 := 1;
+    while o1 < Others.Count do
     begin
-      NormalFactor := i;
-      Break;
+      o2 := o1 + 1;
+      while o2 < Others.Count do
+      begin
+        Other1 := Others[o1];
+        Other2 := Others[o2];
+        if Other1.Quadrant <> Other2.Quadrant then
+          Break;
+        if (Other1.DX * Other2.DY) = (Other2.DX * Other1.DY) then
+          Others.Delete(o2)
+        else
+          Inc(o2);
+      end;
+      Inc(o1);
     end;
+
+    Candidate.Number := Others.Count - 1;
   end;
 
-  NormalX := DeltaOtherX div NormalFactor;
-  NormalY := DeltaOtherY div NormalFactor;
-end;
-
-function TCanSee.Past(Blocker: TAsteroid): Boolean;
-begin
-  // Not all different, say true. There is no third one to block.
-  if (Me = Blocker) or (Me = Other) or (Blocker = Other) then
-    Exit(True);
-
-  // Not in the same quadrant? No need to look further, they are visible.
-  if ((Blocker.X < Me.X) xor (Other.X < Me.X)) or ((Blocker.Y < Me.Y) xor (Other.Y < Me.Y)) then
-    Exit(True);
-
-  DeltaBlockerX := Abs(Blocker.X - Me.X);
-  DeltaBlockerY := Abs(Blocker.Y - Me.Y);
-
-  // Further away? Can't be blocking. Visible is true.
-  if (DeltaBlockerX > DeltaOtherX) or (DeltaBlockerY > DeltaOtherY) then
-    Exit(True);
-
-  Result := ((DeltaBlockerX * NormalY) <> (DeltaBlockerY * NormalX));
+  Result := Candidates;
 end;
 
 end.

@@ -111,8 +111,6 @@ type
       '....#'#13+
       '...##', '(3,4):8' { Asteroid at 3,4 can see 8 } )]
 
-    procedure Tests(const Puzzle, Input, ExpectedResult: String);
-
     [AoCTestCase('2019.10.1',
       '......#.#.'#13+
       '#..#.#....'#13+
@@ -171,15 +169,11 @@ type
       '#.#.#.#####.####.###'#13+
       '###.##.####.##.#..##', '(11,13):210')]
 
-    procedure NoTests(const Puzzle, Input, ExpectedResult: String);
+    procedure Tests(const Puzzle, Input, ExpectedResult: String);
+
   end;
 
 implementation
-
-procedure TPuzzleTests2019.NoTests(const Puzzle, Input, ExpectedResult: String);
-begin
-  Assert.Pass('');
-end;
 
 procedure TPuzzleTests2019.Setup;
 begin
