@@ -103,6 +103,7 @@
         <DCCReference Include="Permutation.pas"/>
         <DCCReference Include="Space.Image.pas"/>
         <DCCReference Include="Asteroid.Map.pas"/>
+        <DCCReference Include="Robot.Painter.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

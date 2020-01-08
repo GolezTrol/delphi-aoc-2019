@@ -20,7 +20,8 @@ uses
   Orbit.Map in 'Orbit.Map.pas',
   Permutation in 'Permutation.pas',
   Space.Image in 'Space.Image.pas',
-  Asteroid.Map in 'Asteroid.Map.pas';
+  Asteroid.Map in 'Asteroid.Map.pas',
+  Robot.Painter in 'Robot.Painter.pas';
 
 {$R *.res}
 

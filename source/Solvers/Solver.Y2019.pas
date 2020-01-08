@@ -84,6 +84,13 @@ type
   TSolver2019_10_2 = class(TInterfacedObject, ISolver)
     function Solve(Input: String): String;
   end;
+  // Day 11: Space Police
+  TSolver2019_11_1 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
+  TSolver2019_11_2 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
 
 implementation
 
@@ -98,7 +105,8 @@ uses
   Orbit.Map,
   Permutation,
   Space.Image,
-  Asteroid.Map;
+  Asteroid.Map,
+  Robot.Painter;
 
 { TSolver2019_1_1 }
 
@@ -558,6 +566,44 @@ begin
   Map.GetBestOutlook(X, Y, Number);
   Asteroid := Map.GetZappList(Map.GetAsteroid(X, Y))[Index -1];
   Result := Format('(%d,%d):%d', [Asteroid.X, Asteroid.Y, Asteroid.X*100+Asteroid.Y]);
+end;
+
+{ TSolver2019_11_1 }
+
+function TSolver2019_11_1.Solve(Input: String): String;
+var
+  Code: TIntegerArray;
+  IO: IRobotPainter;
+begin
+  IO := TRobotPainter.Create(0 {Black});
+
+  with TIntCodeProcessor.Create(IO) do
+  try
+    Code := TInput.IntCommaSeparated(Input);
+    Execute(Code);
+    Result := IO.GetPanels.Count.ToString();
+  finally
+    Free;
+  end;
+end;
+
+{ TSolver2019_11_2 }
+
+function TSolver2019_11_2.Solve(Input: String): String;
+var
+  Code: TIntegerArray;
+  IO: IRobotPainter;
+begin
+  IO := TRobotPainter.Create(1 {White});
+
+  with TIntCodeProcessor.Create(IO) do
+  try
+    Code := TInput.IntCommaSeparated(Input);
+    Execute(Code);
+    Result := IO.Draw;
+  finally
+    Free;
+  end;
 end;
 
 end.
