@@ -47,6 +47,43 @@ type
     '....7'#13#10+
     '...87'#13#10, '|')]
     procedure TestDrawNumber(Input, Expected: String);
+
+    const
+      Field =
+        '.#..##.###...#######'#13+
+        '##.############..##.'#13+
+        '.#.######.########.#'#13+
+        '.###.#######.####.#.'#13+
+        '#####.##.#.##.###.##'#13+
+        '..#####..#.#########'#13+
+        '####################'#13+
+        '#.####....###.#.#.##'#13+
+        '##.#################'#13+
+        '#####.##.###..####..'#13+
+        '..######..##.#######'#13+
+        '####.##.####...##..#'#13+
+        '.#####..#.######.###'#13+
+        '##...#.##########...'#13+
+        '#.##########.#######'#13+
+        '.####.#.###.###.#.##'#13+
+        '....##.##.###..#####'#13+
+        '.#.#.###########.###'#13+
+        '#.#.#.#####.####.###'#13+
+        '###.##.####.##.#..##';
+
+    [Test]
+    [TestCase('1', '1,11,12')]
+    [TestCase('2', '2,12,1')]
+    [TestCase('3', '3,12,2')]
+    [TestCase('10', '10,12,8')]
+    [TestCase('20', '20,16,0')]
+    [TestCase('50', '50,16,9')]
+    [TestCase('100', '100,10,16')]
+    [TestCase('199', '199,9,6')]
+    [TestCase('200', '200,8,2')]
+    [TestCase('201', '201,10,9')]
+    [TestCase('299', '299,11,1')]
+    procedure TestZapp(const Nr, X, Y: Integer);
   end;
 
 implementation
@@ -80,6 +117,24 @@ begin
   finally
     Map.Free;
   end;
+end;
+
+procedure TAsteroidTrackerTests.TestZapp(const Nr, X, Y: Integer);
+var
+  AsteroidMap: TAsteroidMap;
+  Asteroid: TAsteroid;
+  ZappList: IAsteroidList;
+
+  procedure Check(Nr, X, Y: Integer);
+  begin
+    Dec(Nr); // 0 based
+    Assert.AreEqual(Format('%d,%d', [X, Y]), Format('%d,%d', [ZappList[Nr].X, ZappList[Nr].Y]), Format('Nr %d', [Nr]));
+  end;
+begin
+  AsteroidMap := TInput.CreateAsteroidMap(Field);
+  Asteroid := AsteroidMap.GetAsteroid(11,13);
+  ZappList := AsteroidMap.GetZappList(Asteroid);
+  Check(Nr, X, Y);
 end;
 
 initialization

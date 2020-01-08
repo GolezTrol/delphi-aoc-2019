@@ -545,8 +545,19 @@ end;
 { TSolver2019_10_2 }
 
 function TSolver2019_10_2.Solve(Input: String): String;
+const
+  Index = 200; // We need the 200th.
+var
+  Map: TAsteroidMap;
+  Asteroid: TAsteroid; // The asteroid of the answer
+  X, Y, Number: Integer;
 begin
-
+  Map := TInput.CreateAsteroidMap(Input);
+  // The GetBestOutlook call is slow, but needed here to make this puzzle
+  // work for different inputs, and independent of the other solvers.
+  Map.GetBestOutlook(X, Y, Number);
+  Asteroid := Map.GetZappList(Map.GetAsteroid(X, Y))[Index -1];
+  Result := Format('(%d,%d):%d', [Asteroid.X, Asteroid.Y, Asteroid.X*100+Asteroid.Y]);
 end;
 
 end.
