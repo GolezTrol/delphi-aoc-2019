@@ -5,7 +5,8 @@ interface
 uses
   AoC.Types,
   Orbit.Map,
-  Asteroid.Map;
+  Asteroid.Map,
+  Moon.Motion;
 
 type
   TInput = class
@@ -19,6 +20,7 @@ type
     class procedure Orbit(Input: String; out Parent, Body: String);
     class function CreateOrbitMap(Input: String): TOrbitMap;
     class function CreateAsteroidMap(Input: String): TAsteroidMap;
+    class function Moons(Input: String): TMoons;
   end;
 
 implementation
@@ -113,6 +115,33 @@ begin
       Result[i] := sl[i].ToInt64;
   finally
     sl.Free;
+  end;
+end;
+
+class function TInput.Moons(Input: String): TMoons;
+var
+  Lines: TStringArray;
+  Values: TStringList;
+  Line: String;
+  Item: Integer;
+begin
+  Values := TStringList.Create;
+  try
+    Lines := StringPerLine(Input);
+    SetLength(Result, Length(Lines));
+    Item := 0;
+    for Line in Lines do
+    begin
+
+      Values.CommaText := Copy(Line, 2, Length(Line) - 2);
+      Result[Item].Position[X] := Values.Values['X'].ToInteger();
+      Result[Item].Position[Y] := Values.Values['Y'].ToInteger();
+      Result[Item].Position[Z] := Values.Values['Z'].ToInteger();
+
+      Inc(Item);
+    end;
+  finally
+    Values.Free;
   end;
 end;
 

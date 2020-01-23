@@ -27,7 +27,8 @@ uses
   Permutation.Tests in 'Permutation.Tests.pas',
   Space.Image.Tests in 'Space.Image.Tests.pas',
   AoC.Assert.Helper in 'AoC.Assert.Helper.pas',
-  Asteroid.Map.Tests in 'Asteroid.Map.Tests.pas';
+  Asteroid.Map.Tests in 'Asteroid.Map.Tests.pas',
+  Moon.Motion.Tests in 'Moon.Motion.Tests.pas';
 
 {$R *.RES}
 

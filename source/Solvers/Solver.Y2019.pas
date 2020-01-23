@@ -91,6 +91,13 @@ type
   TSolver2019_11_2 = class(TInterfacedObject, ISolver)
     function Solve(Input: String): String;
   end;
+  // Day 12: The N-Body Problem
+  TSolver2019_12_1 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
+  TSolver2019_12_2 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
 
 implementation
 
@@ -106,7 +113,8 @@ uses
   Permutation,
   Space.Image,
   Asteroid.Map,
-  Robot.Painter;
+  Robot.Painter,
+  Moon.Motion;
 
 { TSolver2019_1_1 }
 
@@ -604,6 +612,27 @@ begin
   finally
     Free;
   end;
+end;
+
+{ TSolver2019_12_1 }
+
+function TSolver2019_12_1.Solve(Input: String): String;
+var
+  Moons: TMoons;
+  i: Integer;
+begin
+  Moons := TInput.Moons(Input);
+  for i := 1 to 1000 do
+    TMoonMotion.StepGravity(Moons);
+
+  Result := TMoonMotion.GetMoonsEnergy(Moons).ToString();
+end;
+
+{ TSolver2019_12_2 }
+
+function TSolver2019_12_2.Solve(Input: String): String;
+begin
+
 end;
 
 end.

@@ -104,6 +104,7 @@
         <DCCReference Include="Space.Image.pas"/>
         <DCCReference Include="Asteroid.Map.pas"/>
         <DCCReference Include="Robot.Painter.pas"/>
+        <DCCReference Include="Moon.Motion.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

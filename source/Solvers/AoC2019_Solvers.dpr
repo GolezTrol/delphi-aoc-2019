@@ -21,7 +21,8 @@ uses
   Permutation in 'Permutation.pas',
   Space.Image in 'Space.Image.pas',
   Asteroid.Map in 'Asteroid.Map.pas',
-  Robot.Painter in 'Robot.Painter.pas';
+  Robot.Painter in 'Robot.Painter.pas',
+  Moon.Motion in 'Moon.Motion.pas';
 
 {$R *.res}
 

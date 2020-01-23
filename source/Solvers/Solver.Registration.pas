@@ -37,10 +37,14 @@ begin
   Container.RegisterType<ISolver, TSolver2019_9_1>('2019.9.1');
   Container.RegisterType<ISolver, TSolver2019_9_2>('2019.9.2');
   // Too slow
-  //Container.RegisterType<ISolver, TSolver2019_10_1>('2019.10.1');
-  //Container.RegisterType<ISolver, TSolver2019_10_2>('2019.10.2');
+  {$IFDEF TESTINSIGHT}
+  Container.RegisterType<ISolver, TSolver2019_10_1>('2019.10.1');
+  Container.RegisterType<ISolver, TSolver2019_10_2>('2019.10.2');
+  {$ENDIF}
   Container.RegisterType<ISolver, TSolver2019_11_1>('2019.11.1');
   Container.RegisterType<ISolver, TSolver2019_11_2>('2019.11.2');
+  Container.RegisterType<ISolver, TSolver2019_12_1>('2019.12.1');
+  Container.RegisterType<ISolver, TSolver2019_12_2>('2019.12.2');
 end;
 
 end.

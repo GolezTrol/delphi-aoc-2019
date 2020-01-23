@@ -93,6 +93,7 @@
         <DCCReference Include="Space.Image.Tests.pas"/>
         <DCCReference Include="AoC.Assert.Helper.pas"/>
         <DCCReference Include="Asteroid.Map.Tests.pas"/>
+        <DCCReference Include="Moon.Motion.Tests.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
