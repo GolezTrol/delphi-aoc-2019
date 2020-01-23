@@ -44,7 +44,9 @@ begin
   Container.RegisterType<ISolver, TSolver2019_11_1>('2019.11.1');
   Container.RegisterType<ISolver, TSolver2019_11_2>('2019.11.2');
   Container.RegisterType<ISolver, TSolver2019_12_1>('2019.12.1');
+  {$IFDEF TESTINSIGHT}
   Container.RegisterType<ISolver, TSolver2019_12_2>('2019.12.2');
+  {$ENDIF}
 end;
 
 end.
