@@ -19,6 +19,19 @@ type
     procedure TestVelocity;
     [Test]
     procedure TestEnergy;
+    [Test]
+    [TestCase('Fast',
+      '<x=-1, y=0, z=2>'#13+
+      '<x=2, y=-10, z=-7>'#13+
+      '<x=4, y=-8, z=8>'#13+
+      '<x=3, y=5, z=-1>'#13+'|2772', '|')]
+
+    [TestCase('Slow',
+      '<x=-8, y=-10, z=0>'#13+
+      '<x=5, y=5, z=10>'#13+
+      '<x=2, y=-7, z=3>'#13+
+      '<x=9, y=-8, z=-3>'#13+'|4686774924', '|')]
+    procedure TestRepetition(const Input: String; const Output: String);
   end;
 
 implementation
@@ -64,6 +77,14 @@ begin
   Assert.AreEqual(290, TMoonMotion.GetMoonsEnergy(Moons));
   AddMoon(13, 16, 3 {32}, 3, 11, 5 {19}); // = 608, 898 cumulative
   Assert.AreEqual(898, TMoonMotion.GetMoonsEnergy(Moons));
+end;
+
+procedure TMoonMotionTests.TestRepetition(const Input, Output: String);
+var
+  Moons: TMoons;
+begin
+  Moons := TInput.Moons(Input);
+  Assert.AreEqual(Output.ToInt64, TMoonMotion.StepsUntilRepeat(Moons));
 end;
 
 procedure TMoonMotionTests.TestVelocity;

@@ -170,11 +170,19 @@ type
       '###.##.####.##.#..##', '(11,13):210')]
 
     // Day 12: The N-Body Problem
+    // My actual puzzle input
     [AoCTestCase('2019.12.1',
       '<x=17, y=5, z=1>'#13+
       '<x=-2, y=-8, z=8>'#13+
       '<x=7, y=-6, z=14>'#13+
       '<x=1, y=-10, z=4>'#13, '9876')]
+
+    // TODO Make faster. This is 10 minutes or so
+    {[AoCTestCase('2019.12.2',
+      '<x=17, y=5, z=1>'#13+
+      '<x=-2, y=-8, z=8>'#13+
+      '<x=7, y=-6, z=14>'#13+
+      '<x=1, y=-10, z=4>'#13, '307043147758488')]}
     procedure Tests(const Puzzle, Input, ExpectedResult: String);
 
   end;

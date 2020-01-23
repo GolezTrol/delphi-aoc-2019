@@ -631,8 +631,11 @@ end;
 { TSolver2019_12_2 }
 
 function TSolver2019_12_2.Solve(Input: String): String;
+var
+  Moons: TMoons;
 begin
-
+  Moons := TInput.Moons(Input);
+  Result := TMoonMotion.StepsUntilRepeat(Moons).ToString();
 end;
 
 end.
