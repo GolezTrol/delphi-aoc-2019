@@ -71,6 +71,7 @@ var
   m: Integer;
   d: TDimension;
   Ok: Integer;
+  LCM: array[TDimension] of Int64;
 begin
   Count[X] := 0; Count[Y] := 0; Count[Z] := 0;
 
@@ -109,11 +110,17 @@ begin
 
   // Find lowest common multiple.
   // This is the slowest part for a huge number like the puzzle input.
-  // Took close to 10 minutes...
-  m := Max(Max(Count[X], Count[Y]), Count[Z]);
-  Result := m;
-  while (Result mod Count[X] > 0) or (Result mod Count[Y] > 0) or (Result mod Count[Z] > 0) do
-    Inc(Result, m);
+  // Took about 15 seconds to run.
+  LCM[X] := Count[X];
+  LCM[Y] := Count[Y];
+  LCM[Z] := Count[Z];
+  repeat
+    while LCM[X] < LCM[Z] do Inc(LCM[X], Count[X]);
+    while LCM[Y] < LCM[X] do Inc(LCM[Y], Count[Y]);
+    while LCM[Z] < LCM[Y] do Inc(LCM[Z], Count[Z]);
+  until (LCM[X] = LCM[Y]) and (LCM[X] = LCM[Z]);
+
+  Result := LCM[X];
 end;
 
 { TMoon }
