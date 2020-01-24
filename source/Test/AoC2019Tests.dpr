@@ -28,7 +28,8 @@ uses
   Space.Image.Tests in 'Space.Image.Tests.pas',
   AoC.Assert.Helper in 'AoC.Assert.Helper.pas',
   Asteroid.Map.Tests in 'Asteroid.Map.Tests.pas',
-  Moon.Motion.Tests in 'Moon.Motion.Tests.pas';
+  Moon.Motion.Tests in 'Moon.Motion.Tests.pas',
+  ArcadeGame.Tests in 'ArcadeGame.Tests.pas';
 
 {$R *.RES}
 

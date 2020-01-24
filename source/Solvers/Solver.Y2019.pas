@@ -98,6 +98,13 @@ type
   TSolver2019_12_2 = class(TInterfacedObject, ISolver)
     function Solve(Input: String): String;
   end;
+  // Day 13: Care Package
+  TSolver2019_13_1 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
+  TSolver2019_13_2 = class(TInterfacedObject, ISolver)
+    function Solve(Input: String): String;
+  end;
 
 implementation
 
@@ -114,7 +121,8 @@ uses
   Space.Image,
   Asteroid.Map,
   Robot.Painter,
-  Moon.Motion;
+  Moon.Motion,
+  ArcadeGame;
 
 { TSolver2019_1_1 }
 
@@ -636,6 +644,39 @@ var
 begin
   Moons := TInput.Moons(Input);
   Result := TMoonMotion.StepsUntilRepeat(Moons).ToString();
+end;
+
+{ TSolver2019_13_1 }
+
+function TSolver2019_13_1.Solve(Input: String): String;
+var
+  Game: IArcadeGame;
+  Code: TIntegerArray;
+  Obj: TGameObject;
+  Count: Integer;
+begin
+  Count := 0;
+  Game := TArcadeGame.Create;
+  with TIntCodeProcessor.Create(Game) do
+  try
+    Code := TInput.IntCommaSeparated(Input);
+    Execute(Code);
+
+    for Obj in Game.GetGrid.Values do
+      if Obj = Block then
+        Inc(Count);
+
+    Result := Count.ToString;
+  finally
+    Free;
+  end;
+end;
+
+{ TSolver2019_13_2 }
+
+function TSolver2019_13_2.Solve(Input: String): String;
+begin
+
 end;
 
 end.

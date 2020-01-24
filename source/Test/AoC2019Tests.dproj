@@ -94,6 +94,7 @@
         <DCCReference Include="AoC.Assert.Helper.pas"/>
         <DCCReference Include="Asteroid.Map.Tests.pas"/>
         <DCCReference Include="Moon.Motion.Tests.pas"/>
+        <DCCReference Include="ArcadeGame.Tests.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
